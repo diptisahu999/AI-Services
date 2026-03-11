@@ -44,11 +44,12 @@ class ImgDeblur:
             channel_multiplier=channel_multiplier,
             bg_upsampler=self.bg_upsampler
         )
-    
     def process_image(self, img_path, output_image_path):
         input_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
         if input_img is None:
             raise ValueError(f"Image not found or cannot be read: {img_path}")
+        
+        h, w = input_img.shape[:2]
 
         cropped_faces, restored_faces, restored_img = self.restorer.enhance(
             input_img,
@@ -60,6 +61,9 @@ class ImgDeblur:
 
         if not isinstance(restored_img, np.ndarray):
             raise TypeError(f"Expected numpy.ndarray for restored_img, but got {type(restored_img)}")
+
+        # Resize back to original size to maintain input-output dimensions
+        restored_img = cv2.resize(restored_img, (w, h), interpolation=cv2.INTER_LANCZOS4)
 
         if not cv2.imwrite(output_image_path, restored_img):
             raise IOError(f"Failed to write image to {output_image_path}")

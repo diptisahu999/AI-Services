@@ -187,7 +187,7 @@
       try {
         const data = await response.json();
         if (data?.detail) message = data.detail;
-      } catch (_) {}
+      } catch (_) { }
       throw new Error(message);
     }
 

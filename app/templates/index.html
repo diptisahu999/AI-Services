@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -108,136 +109,139 @@
 
         <!-- ✅ SERVICE BLOCK (COPY/PASTE THIS WHOLE BLOCK FOR NEW SERVICES) -->
         <section class="service-block" id="service-ai-image-cleaner">
-            <div class="service-block__head">
+          <div class="service-block__head">
             <h3 class="service-block__title">AI Image Cleaner</h3>
-            </div>
+          </div>
 
-            <div class="service-split">
+          <div class="service-split">
             <!-- Left: Working panel -->
             <div class="work-card" id="image-cleaner">
-                <div class="work-card__head">
+              <div class="work-card__head">
                 <div class="service-badge">
-                    <span class="service-badge__icon" aria-hidden="true">🪄</span>
-                    <span class="service-badge__text">AI Image Cleaner</span>
+                  <span class="service-badge__icon" aria-hidden="true">🪄</span>
+                  <span class="service-badge__text">AI Image Cleaner</span>
                 </div>
                 <div class="work-card__status" id="statusPill">Idle</div>
-                </div>
+              </div>
 
-                <div class="work-card__body">
+              <div class="work-card__body">
                 <div class="uploader" id="dropzone" tabindex="0" role="button" aria-label="Upload image">
-                    <input id="fileInput" type="file" accept="image/*" hidden />
-                    <div class="uploader__icon" aria-hidden="true">⬆</div>
-                    <div class="uploader__title">Upload an image</div>
-                    <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
-                    <!-- <div class="uploader__hint">Tip: use a noisy / low-quality image to see the effect.</div> -->
+                  <input id="fileInput" type="file" accept="image/*" hidden />
+                  <div class="uploader__icon" aria-hidden="true">⬆</div>
+                  <div class="uploader__title">Upload an image</div>
+                  <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
+                  <!-- <div class="uploader__hint">Tip: use a noisy / low-quality image to see the effect.</div> -->
                 </div>
 
                 <div class="controls">
-                    <div class="control">
+                  <div class="control">
                     <label class="label">Cleaning strength</label>
                     <div class="range">
-                        <input id="strength" type="range" min="10" max="100" value="60" />
-                        <span class="range__val" id="strengthVal">60%</span>
+                      <input id="strength" type="range" min="10" max="100" value="60" />
+                      <span class="range__val" id="strengthVal">60%</span>
                     </div>
-                    </div>
+                  </div>
 
-                    <div class="control">
+                  <div class="control">
                     <label class="label">Mode</label>
                     <div class="seg">
-                        <button class="seg__btn is-on" data-mode="balanced" type="button">Balanced</button>
-                        <button class="seg__btn" data-mode="strong" type="button">Strong</button>
-                        <button class="seg__btn" data-mode="detail" type="button">Detail</button>
+                      <button class="seg__btn is-on" data-mode="balanced" type="button">Balanced</button>
+                      <button class="seg__btn" data-mode="strong" type="button">Strong</button>
+                      <button class="seg__btn" data-mode="detail" type="button">Detail</button>
                     </div>
-                    </div>
+                  </div>
                 </div>
 
                 <div class="actions">
-                    <button class="btn btn--primary btn--wide" id="cleanBtn" type="button" disabled>
+                  <button class="btn btn--primary btn--wide" id="cleanBtn" type="button" disabled>
                     Clean Image
                     <span class="btn__shine" aria-hidden="true"></span>
-                    </button>
-                    <button class="btn btn--ghost" id="resetBtn" type="button" disabled>Reset</button>
+                  </button>
+                  <button class="btn btn--ghost" id="resetBtn" type="button" disabled>Reset</button>
                 </div>
 
                 <div class="preview">
-                    <div class="preview__pane">
+                  <div class="preview__pane">
                     <div class="preview__top">
-                        <span class="preview__title">Original</span>
-                        <span class="preview__meta" id="origMeta">—</span>
+                      <span class="preview__title">Original</span>
+                      <span class="preview__meta" id="origMeta">—</span>
                     </div>
                     <div class="preview__box">
-                        <img id="origImg" alt="Original preview" />
-                        <div class="empty" id="origEmpty">
+                      <img id="origImg" alt="Original preview" />
+                      <div class="empty" id="origEmpty">
                         No image selected
-                        </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
 
-                    <div class="preview__pane">
+                  <div class="preview__pane">
                     <div class="preview__top">
-                        <span class="preview__title">Cleaned</span>
-                        <span class="preview__meta" id="cleanMeta">—</span>
+                      <span class="preview__title">Cleaned</span>
+                      <span class="preview__meta" id="cleanMeta">—</span>
                     </div>
                     <div class="preview__box preview__box--glow">
-                        <img id="cleanImg" alt="Cleaned preview" />
-                        <div class="empty" id="cleanEmpty">
+                      <img id="cleanImg" alt="Cleaned preview" />
+                      <div class="empty" id="cleanEmpty">
                         Click “Clean Image” to generate output
-                        </div>
+                      </div>
 
-                        <div class="loader" id="loader" aria-hidden="true">
+                      <div class="loader" id="loader" aria-hidden="true">
                         <div class="loader__ring"></div>
                         <div class="loader__text">Cleaning…</div>
-                        </div>
+                      </div>
                     </div>
                     <div class="preview__actions">
-                        <a id="downloadCleanBtn" class="btn btn--ghost preview__download" href="#" download="cleaned-image.png" style="display:none;">
+                      <a id="downloadCleanBtn" class="btn btn--ghost preview__download" href="#"
+                        download="cleaned-image.png" style="display:none;">
                         Download Image
-                        </a>
+                      </a>
                     </div>
-                    </div>
+                  </div>
                 </div>
 
                 <div class="note">
-                    Clicking “Clean Image” now sends the selected image to the backend and renders the cleaned output returned by the service.
+                  Clicking “Clean Image” now sends the selected image to the backend and renders the cleaned output
+                  returned by the service.
                 </div>
-                </div>
+              </div>
             </div>
 
             <!-- Right: Description -->
             <aside class="desc-card">
-                <div class="desc-card__glow" aria-hidden="true"></div>
-                <h3 class="desc-card__title">AI Image Cleaner</h3>
-                <p class="desc-card__text">
+              <div class="desc-card__glow" aria-hidden="true"></div>
+              <h3 class="desc-card__title">AI Image Cleaner</h3>
+              <p class="desc-card__text">
                 Upload an image and get a cleaner version — reduce noise, improve clarity, and make it
                 ready for use in reports, documents, portfolios, and listings.
-                </p>
+              </p>
 
-                <div class="desc-points">
-                    <div class="point">
-                        <div class="point__icon" aria-hidden="true">✨</div>
-                        <div>
-                        <div class="point__title">Remove artifacts</div>
-                        <div class="point__text">Reduce compression noise, grain, and unwanted texture.</div>
-                        </div>
-                    </div>
-                    <div class="point">
-                        <div class="point__icon" aria-hidden="true">⚡</div>
-                        <div>
-                        <div class="point__title">Instant preview</div>
-                        <div class="point__text">Clean button triggers processing, then shows output side-by-side.</div>
-                        </div>
-                    </div>
+              <div class="desc-points">
+                <div class="point">
+                  <div class="point__icon" aria-hidden="true">✨</div>
+                  <div>
+                    <div class="point__title">Remove artifacts</div>
+                    <div class="point__text">Reduce compression noise, grain, and unwanted texture.</div>
+                  </div>
                 </div>
+                <div class="point">
+                  <div class="point__icon" aria-hidden="true">⚡</div>
+                  <div>
+                    <div class="point__title">Instant preview</div>
+                    <div class="point__text">Clean button triggers processing, then shows output side-by-side.</div>
+                  </div>
+                </div>
+              </div>
 
 
-                <div class="desc-cta">
-                <button class="btn btn--primary btn--wide" type="button" onclick="document.querySelector('#dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
-                    Start Cleaning
-                    <span class="btn__shine" aria-hidden="true"></span>
+              <div class="desc-cta">
+                <button class="btn btn--primary btn--wide" type="button"
+                  onclick="document.querySelector('#dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
+                  Start Cleaning
+                  <span class="btn__shine" aria-hidden="true"></span>
                 </button>
-                </div>
+              </div>
             </aside>
-            </div>
+          </div>
         </section>
       </div>
     </section>
@@ -257,4 +261,5 @@
 
   <script src="../static/js/index.js"></script>
 </body>
+
 </html>
