@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Home - AI Service App</title>
-  <link rel="stylesheet" href="../static/css/index.css" />
+  <link rel="stylesheet" href="/static/css/index.css" />
 </head>
 
 <body>
@@ -32,11 +32,6 @@
     <section class="hero">
       <div class="container hero__inner">
         <div class="hero__copy">
-          <div class="chip">
-            <span class="chip__dot" aria-hidden="true"></span>
-            <span>Modern AI Services — fast, clean, and modular</span>
-          </div>
-
           <h1 class="hero__title">
             Build beautiful
             <span class="text-glow">AI Applications</span>
@@ -61,6 +56,10 @@
           <div class="orb orb--outer"></div>
           <div class="orb orb--inner"></div>
 
+          <br />
+          <br />
+          <br />
+          <br />
           <div class="glass-panel">
             <div class="glass-panel__top">
               <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
@@ -107,38 +106,37 @@
           <h2 class="section__title">Services</h2>
         </div>
 
-        <!-- ✅ SERVICE BLOCK (COPY/PASTE THIS WHOLE BLOCK FOR NEW SERVICES) -->
-        <section class="service-block" id="service-ai-image-cleaner">
+        <!-- AI Image Cleaner -->
+        <section class="service-block" id="service-cleaner">
           <div class="service-block__head">
             <h3 class="service-block__title">AI Image Cleaner</h3>
           </div>
 
           <div class="service-split">
             <!-- Left: Working panel -->
-            <div class="work-card" id="image-cleaner">
+            <div class="work-card" id="cleaner-panel">
               <div class="work-card__head">
                 <div class="service-badge">
                   <span class="service-badge__icon" aria-hidden="true">🪄</span>
                   <span class="service-badge__text">AI Image Cleaner</span>
                 </div>
-                <div class="work-card__status" id="statusPill">Idle</div>
+                <div class="work-card__status" id="cleaner-statusPill">Idle</div>
               </div>
 
               <div class="work-card__body">
-                <div class="uploader" id="dropzone" tabindex="0" role="button" aria-label="Upload image">
-                  <input id="fileInput" type="file" accept="image/*" hidden />
+                <input id="cleaner-fileInput" type="file" accept="image/*" hidden />
+                <div class="uploader" id="cleaner-dropzone" tabindex="0" role="button" aria-label="Upload image">
                   <div class="uploader__icon" aria-hidden="true">⬆</div>
                   <div class="uploader__title">Upload an image</div>
                   <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
-                  <!-- <div class="uploader__hint">Tip: use a noisy / low-quality image to see the effect.</div> -->
                 </div>
 
                 <div class="controls">
                   <div class="control">
                     <label class="label">Cleaning strength</label>
                     <div class="range">
-                      <input id="strength" type="range" min="10" max="100" value="60" />
-                      <span class="range__val" id="strengthVal">60%</span>
+                      <input id="cleaner-strength" type="range" min="10" max="100" value="60" />
+                      <span class="range__val" id="cleaner-strengthVal">60%</span>
                     </div>
                   </div>
 
@@ -153,22 +151,22 @@
                 </div>
 
                 <div class="actions">
-                  <button class="btn btn--primary btn--wide" id="cleanBtn" type="button" disabled>
+                  <button class="btn btn--primary btn--wide" id="cleaner-btn" type="button" disabled>
                     Clean Image
                     <span class="btn__shine" aria-hidden="true"></span>
                   </button>
-                  <button class="btn btn--ghost" id="resetBtn" type="button" disabled>Reset</button>
+                  <button class="btn btn--ghost" id="cleaner-resetBtn" type="button" disabled>Reset</button>
                 </div>
 
                 <div class="preview">
                   <div class="preview__pane">
                     <div class="preview__top">
                       <span class="preview__title">Original</span>
-                      <span class="preview__meta" id="origMeta">—</span>
+                      <span class="preview__meta" id="cleaner-origMeta">—</span>
                     </div>
                     <div class="preview__box">
-                      <img id="origImg" alt="Original preview" />
-                      <div class="empty" id="origEmpty">
+                      <img id="cleaner-origImg" alt="Original preview" />
+                      <div class="empty" id="cleaner-origEmpty">
                         No image selected
                       </div>
                     </div>
@@ -177,21 +175,21 @@
                   <div class="preview__pane">
                     <div class="preview__top">
                       <span class="preview__title">Cleaned</span>
-                      <span class="preview__meta" id="cleanMeta">—</span>
+                      <span class="preview__meta" id="cleaner-outputMeta">—</span>
                     </div>
                     <div class="preview__box preview__box--glow">
-                      <img id="cleanImg" alt="Cleaned preview" />
-                      <div class="empty" id="cleanEmpty">
+                      <img id="cleaner-outputImg" alt="Cleaned preview" />
+                      <div class="empty" id="cleaner-outputEmpty">
                         Click “Clean Image” to generate output
                       </div>
 
-                      <div class="loader" id="loader" aria-hidden="true">
+                      <div class="loader" id="cleaner-loader" aria-hidden="true">
                         <div class="loader__ring"></div>
                         <div class="loader__text">Cleaning…</div>
                       </div>
                     </div>
                     <div class="preview__actions">
-                      <a id="downloadCleanBtn" class="btn btn--ghost preview__download" href="#"
+                      <a id="cleaner-downloadBtn" class="btn btn--ghost preview__download" href="#"
                         download="cleaned-image.png" style="display:none;">
                         Download Image
                       </a>
@@ -235,8 +233,134 @@
 
               <div class="desc-cta">
                 <button class="btn btn--primary btn--wide" type="button"
-                  onclick="document.querySelector('#dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
+                  onclick="document.querySelector('#cleaner-dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
                   Start Cleaning
+                  <span class="btn__shine" aria-hidden="true"></span>
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- AI Image To Art -->
+        <section class="service-block" id="service-art" style="margin-top: 60px;">
+          <div class="service-block__head">
+            <h3 class="service-block__title">AI Image To Art</h3>
+          </div>
+
+          <div class="service-split">
+            <!-- Left: Working panel -->
+            <div class="work-card" id="art-panel">
+              <div class="work-card__head">
+                <div class="service-badge">
+                  <span class="service-badge__icon" aria-hidden="true">🎨</span>
+                  <span class="service-badge__text">AI Image To Art</span>
+                </div>
+                <div class="work-card__status" id="art-statusPill">Idle</div>
+              </div>
+
+              <div class="work-card__body">
+                <input id="art-fileInput" type="file" accept="image/*" hidden />
+                <div class="uploader" id="art-dropzone" tabindex="0" role="button" aria-label="Upload image">
+                  <div class="uploader__icon" aria-hidden="true">⬆</div>
+                  <div class="uploader__title">Upload an image</div>
+                  <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
+                </div>
+
+                <div class="controls">
+                  <div class="control">
+                    <label class="label">Artistic style</label>
+                    <div class="seg">
+                      <button class="seg__btn is-on" data-mode="pencil" type="button">Pencil Sketch</button>
+                      <button class="seg__btn" data-mode="oil" type="button" disabled>Oil Paint (Soon)</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn--primary btn--wide" id="art-btn" type="button" disabled>
+                    Convert to Art
+                    <span class="btn__shine" aria-hidden="true"></span>
+                  </button>
+                  <button class="btn btn--ghost" id="art-resetBtn" type="button" disabled>Reset</button>
+                </div>
+
+                <div class="preview">
+                  <div class="preview__pane">
+                    <div class="preview__top">
+                      <span class="preview__title">Original</span>
+                      <span class="preview__meta" id="art-origMeta">—</span>
+                    </div>
+                    <div class="preview__box">
+                      <img id="art-origImg" alt="Original preview" />
+                      <div class="empty" id="art-origEmpty">
+                        No image selected
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="preview__pane">
+                    <div class="preview__top">
+                      <span class="preview__title">Art Result</span>
+                      <span class="preview__meta" id="art-outputMeta">—</span>
+                    </div>
+                    <div class="preview__box preview__box--glow">
+                      <img id="art-outputImg" alt="Art preview" />
+                      <div class="empty" id="art-outputEmpty">
+                        Click “Convert to Art” to generate output
+                      </div>
+
+                      <div class="loader" id="art-loader" aria-hidden="true">
+                        <div class="loader__ring"></div>
+                        <div class="loader__text">Transforming…</div>
+                      </div>
+                    </div>
+                    <div class="preview__actions">
+                      <a id="art-downloadBtn" class="btn btn--ghost preview__download" href="#"
+                        download="artistic-image.png" style="display:none;">
+                        Download Art
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="note">
+                  Clicking “Convert to Art” transforms your image into a beautiful pencil sketch using our AI service.
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Description -->
+            <aside class="desc-card">
+              <div class="desc-card__glow" aria-hidden="true"></div>
+              <h3 class="desc-card__title">AI Image To Art</h3>
+              <p class="desc-card__text">
+                Turn your photos into masterworks. Our AI analyzes the structure of your image to create stunning
+                artistic
+                renditions.
+              </p>
+
+              <div class="desc-points">
+                <div class="point">
+                  <div class="point__icon" aria-hidden="true">✏️</div>
+                  <div>
+                    <div class="point__title">Pencil Sketch</div>
+                    <div class="point__text">Detailed pencil shading and strokes.</div>
+                  </div>
+                </div>
+                <div class="point">
+                  <div class="point__icon" aria-hidden="true">🎨</div>
+                  <div>
+                    <div class="point__title">Multiple Styles</div>
+                    <div class="point__text">More artistic filters coming soon.</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="desc-cta">
+                <button class="btn btn--primary btn--wide" type="button"
+                  onclick="document.querySelector('#art-dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
+                  Start Creating
                   <span class="btn__shine" aria-hidden="true"></span>
                 </button>
               </div>
@@ -259,7 +383,7 @@
     </footer>
   </main>
 
-  <script src="../static/js/index.js"></script>
+  <script src="/static/js/index.js"></script>
 </body>
 
 </html>
