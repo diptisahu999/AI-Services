@@ -19,3 +19,8 @@ async def cleaner_page(request: Request):
 @router.get('/image-to-art', response_class=HTMLResponse)
 async def art_page(request: Request):
     return templates.TemplateResponse('art.html', {'request': request})
+
+
+@router.get('/pricing', response_class=HTMLResponse)
+async def pricing_page(request: Request):
+    return templates.TemplateResponse('pricing.html', {'request': request})

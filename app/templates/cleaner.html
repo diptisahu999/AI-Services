@@ -11,192 +11,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <style>
-        :root {
-            --glass-grad: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-        }
-
-        .service-page {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .premium-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 99px;
-            background: rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            color: #a78bfa;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .work-card {
-            background: var(--glass-grad);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        .work-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 50px 120px -20px rgba(0, 0, 0, 0.7);
-        }
-
-        .uploader {
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.02);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .uploader:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .uploader::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(139, 92, 246, 0.1), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .uploader:hover::after {
-            opacity: 1;
-        }
-
-        .preview__pane {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .preview__top {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .desc-card {
-            background: linear-gradient(165deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .point {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .point:hover {
-            transform: translateX(8px);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .btn--primary {
-            background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
-            border: none;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-            box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.5);
-        }
-
-        .btn--primary:hover {
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.6);
-        }
-
-        .btn--primary:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .shimmer-btn {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .shimmer-btn::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
-            animation: shimmer 3s infinite linear;
-            transform: rotate(30deg);
-            pointer-events: none;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%) rotate(30deg);
-            }
-
-            100% {
-                transform: translateX(100%) rotate(30deg);
-            }
-        }
-
-        .preview__box--glow::after {
-            content: "";
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(139, 92, 246, 0.4), transparent);
-            animation: none;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        .preview__box--scanning::after {
-            animation: scan 2.5s infinite linear;
-        }
-
-        @keyframes scan {
-            0% {
-                top: -100%;
-            }
-
-            100% {
-                top: 100%;
-            }
-        }
-
-        .loader__ring {
-            border-top-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-            width: 48px;
-            height: 48px;
-            border-width: 4px;
-        }
-
-        /* Input Range Premium */
-        input[type="range"] {
-            accent-color: var(--accent);
-        }
-
-        .range__val {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            color: var(--accent);
-        }
-    </style>
 </head>
 
 <body class="service-page">
@@ -207,37 +21,74 @@
         <div class="bg__aurora bg__aurora--c"></div>
     </div>
 
+    <!-- Header (Same as index) -->
     <header class="header">
         <div class="container header__inner">
-            <a class="brand" href="/">
-                <span class="brand__mark" aria-hidden="true"></span>
-                <span class="brand__text">AI Image Cleaner</span>
-            </a>
-            <div class="header__actions">
-                <a href="/" class="btn btn--ghost shine-hover">← Back to Services</a>
+            <div class="nav-left">
+                <a class="brand" href="/">
+                    <div class="brand__logo">C</div>
+                    <span>crompt.ai</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="/" class="nav-item">Chat</a>
+                    <div class="nav-item nav-item--tools">
+                        Tools
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        <div class="mega-menu">
+                            <!-- Mega Menu same as index -->
+                            <div class="mega-menu__sidebar">
+                                <div class="sidebar-item">
+                                    <div class="sidebar-item__link">
+                                        <div class="sidebar-item__icon">🖼️</div>
+                                        <div class="sidebar-item__text">
+                                            <h4>Browser Extension</h4>
+                                            <p>Supports Chrome</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sidebar-item">
+                                    <div class="sidebar-item__link">
+                                        <div class="sidebar-item__icon">🌐</div>
+                                        <div class="sidebar-item__text">
+                                            <h4>Web App</h4>
+                                            <p>Open in browser</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mega-menu__content">
+                                <div class="menu-column">
+                                    <h3>Generative AI</h3>
+                                    <div class="menu-list">
+                                        <a href="/image-to-art" class="menu-link">AI Image To Art</a>
+                                        <a href="/image-cleaner" class="menu-link">AI Image Upscaler</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="nav-item">Pricing</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                <a href="/" class="btn--ghost" style="padding: 10px 20px; font-size: 14px;">← Back to Home</a>
             </div>
         </div>
     </header>
 
     <main>
-        <div class="hero-orb"
-            style="position: fixed; top: 15%; left: 5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%); filter: blur(80px); z-index: -1;">
-        </div>
-
         <section id="services" class="section">
             <div class="container">
-                <!-- AI Image Cleaner -->
                 <section class="service-block" id="service-cleaner">
                     <div class="service-split">
                         <!-- Left: Working panel -->
                         <div class="work-card" id="cleaner-panel">
                             <div class="work-card__head">
                                 <div class="service-badge">
-                                    <span class="service-badge__icon"
-                                        style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);"
-                                        aria-hidden="true">🪄</span>
-                                    <span class="service-badge__text"
-                                        style="font-weight: 800; letter-spacing: -0.01em;">AI Image Cleaner</span>
+                                    <span class="service-badge__icon" aria-hidden="true">🪄</span>
+                                    <span class="service-badge__text">AI Image Cleaner</span>
                                 </div>
                                 <div class="work-card__status" id="cleaner-statusPill">Idle</div>
                             </div>
@@ -246,38 +97,25 @@
                                 <input id="cleaner-fileInput" type="file" accept="image/*" hidden />
                                 <div class="uploader" id="cleaner-dropzone" tabindex="0" role="button"
                                     aria-label="Upload image">
-                                    <div class="uploader__icon" style="font-size: 24px; color: var(--secondary);"
-                                        aria-hidden="true">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                            <polyline points="17 8 12 3 7 8" />
-                                            <line x1="12" y1="3" x2="12" y2="15" />
-                                        </svg>
+                                    <div class="uploader__icon" aria-hidden="true">📤</div>
+                                    <div class="uploader__title">Upload an image</div>
+                                    <div class="uploader__sub">Drag & drop here, or click to browse (X-Super Resolution)
                                     </div>
-                                    <div class="uploader__title" style="font-size: 18px; margin-bottom: 4px;">Upload an
-                                        image</div>
-                                    <div class="uploader__sub" style="opacity: 0.6;">Drag & drop here, or click to
-                                        browse (PNG/JPG/WebP)</div>
                                 </div>
 
                                 <div class="controls">
-                                    <div class="control"
-                                        style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05);">
-                                        <label class="label"
-                                            style="font-weight: 700; color: rgba(255,255,255,0.8);">Cleaning
-                                            strength</label>
-                                        <div class="range">
-                                            <input id="cleaner-strength" type="range" min="10" max="100" value="60" />
-                                            <span class="range__val" id="cleaner-strengthVal">60%</span>
+                                    <div class="control">
+                                        <label class="label">Cleaning strength</label>
+                                        <div class="range" style="display: flex; align-items: center; gap: 12px;">
+                                            <input id="cleaner-strength" type="range" min="10" max="100" value="60"
+                                                style="flex: 1; accent-color: var(--accent2);" />
+                                            <span class="range__val" id="cleaner-strengthVal"
+                                                style="font-weight: 800; min-width: 44px; text-align: right;">60%</span>
                                         </div>
                                     </div>
 
-                                    <div class="control"
-                                        style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05);">
-                                        <label class="label"
-                                            style="font-weight: 700; color: rgba(255,255,255,0.8);">Mode</label>
+                                    <div class="control">
+                                        <label class="label">Processing Mode</label>
                                         <div class="seg">
                                             <button class="seg__btn is-on" data-mode="balanced"
                                                 type="button">Balanced</button>
@@ -288,106 +126,79 @@
                                 </div>
 
                                 <div class="actions">
-                                    <button class="btn btn--primary btn--wide shimmer-btn" id="cleaner-btn"
-                                        type="button" disabled>
+                                    <button class="btn--primary" id="cleaner-btn" type="button" disabled>
                                         Clean Image
                                     </button>
-                                    <button class="btn btn--ghost" id="cleaner-resetBtn" type="button"
+                                    <button class="btn--ghost" id="cleaner-resetBtn" type="button"
                                         disabled>Reset</button>
                                 </div>
 
-                                <div class="preview" style="gap: 20px;">
+                                <div class="preview">
                                     <div class="preview__pane">
                                         <div class="preview__top">
-                                            <span class="preview__title" style="font-weight: 700;">Original</span>
-                                            <span class="preview__meta" id="cleaner-origMeta">—</span>
+                                            <span>Original</span>
+                                            <span id="cleaner-origMeta">—</span>
                                         </div>
                                         <div class="preview__box">
                                             <img id="cleaner-origImg" alt="Original preview" />
-                                            <div class="empty" id="cleaner-origEmpty" style="padding: 40px 20px;">
-                                                <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.3;">🖼️
-                                                </div>
+                                            <div class="empty" id="cleaner-origEmpty">
                                                 No image selected
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="preview__pane" style="border-color: rgba(6, 182, 212, 0.2);">
+                                    <div class="preview__pane" style="border-color: var(--accent2);">
                                         <div class="preview__top">
-                                            <span class="preview__title"
-                                                style="font-weight: 700; color: var(--secondary);">Cleaned Result</span>
-                                            <span class="preview__meta" id="cleaner-outputMeta">—</span>
+                                            <span style="color: var(--accent2);">Cleaned Result</span>
+                                            <span id="cleaner-outputMeta">—</span>
                                         </div>
-                                        <div class="preview__box preview__box--glow" id="cleaner-outputBox">
+                                        <div class="preview__box" id="cleaner-outputBox">
                                             <img id="cleaner-outputImg" alt="Cleaned preview" />
-                                            <div class="empty" id="cleaner-outputEmpty" style="padding: 40px 20px;">
-                                                <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.3;">✨</div>
+                                            <div class="empty" id="cleaner-outputEmpty">
                                                 Click “Clean Image” to transform
                                             </div>
 
-                                            <div class="loader" id="cleaner-loader" aria-hidden="true"
-                                                style="background: rgba(0,0,0,0.6);">
+                                            <div class="loader" id="cleaner-loader" aria-hidden="true">
                                                 <div class="loader__ring"></div>
-                                                <div class="loader__text" style="font-size: 16px; margin-top: 15px;">
-                                                    Cleaning…</div>
+                                                <div class="loader__text" style="font-weight: 700;">Enhancing…</div>
                                             </div>
                                         </div>
-                                        <div class="preview__actions">
-                                            <a id="cleaner-downloadBtn"
-                                                class="btn btn--primary preview__download shimmer-btn" href="#"
+                                        <div class="preview__actions" style="padding: 10px;">
+                                            <a id="cleaner-downloadBtn" class="btn--primary" href="#"
                                                 download="cleaned-image.png"
-                                                style="display:none; width: 100%; border-radius: 12px;">
+                                                style="display:none; width: 100%; border-radius: 8px; text-align: center; font-size: 14px; padding: 12px;">
                                                 Download Cleaned Image
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="note"
-                                    style="margin-top: 20px; text-align: center; font-style: italic; opacity: 0.7;">
-                                    Clicking “Clean Image” sends the selected image to the backend for
-                                    professional-grade enhancement.
-                                </div>
                             </div>
                         </div>
 
                         <!-- Right: Description -->
-                        <aside class="desc-card" style="padding: 30px;">
-                            <div class="premium-badge">Smart Healing</div>
-                            <h3 class="desc-card__title"
-                                style="font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 16px;">AI
-                                Image Cleaner</h3>
-                            <p class="desc-card__text"
-                                style="font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 24px;">
-                                Upload an image and get a cleaner version — reduce noise, improve clarity, and make it
-                                ready for professional use.
+                        <aside class="desc-card">
+                            <div class="premium-badge">Super Resolution</div>
+                            <h3 class="desc-card__title">AI Image Cleaner</h3>
+                            <p class="desc-card__text">
+                                Restore clarity and remove unwanted artifacts from your images. Our neural engine
+                                reconstructs missing details using high-end vision models.
                             </p>
 
-                            <div class="desc-points" style="gap: 16px;">
-                                <div class="point" style="border-radius: 16px; padding: 16px;">
-                                    <div class="point__icon" style="font-size: 20px;" aria-hidden="true">✨</div>
+                            <div class="desc-points">
+                                <div class="point">
+                                    <div class="point__icon">✨</div>
                                     <div>
-                                        <div class="point__title" style="font-size: 16px;">Remove artifacts</div>
-                                        <div class="point__text" style="font-size: 14px; opacity: 0.7;">Reduce
-                                            compression noise and grain.</div>
+                                        <div class="point__title">Remove Artifacts</div>
+                                        <div class="point__text">Reduce compression noise and pixelation.</div>
                                     </div>
                                 </div>
-                                <div class="point" style="border-radius: 16px; padding: 16px;">
-                                    <div class="point__icon" style="font-size: 20px;" aria-hidden="true">⚡</div>
+                                <div class="point">
+                                    <div class="point__icon">🔍</div>
                                     <div>
-                                        <div class="point__title" style="font-size: 16px;">Instant preview</div>
-                                        <div class="point__text" style="font-size: 14px; opacity: 0.7;">Shows output
-                                            side-by-side instantly.</div>
+                                        <div class="point__title">Smart Upscale</div>
+                                        <div class="point__text">Increase resolution while keeping textures sharp.</div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="desc-cta" style="margin-top: 32px;">
-                                <button class="btn btn--primary btn--wide shimmer-btn" type="button"
-                                    style="padding: 18px;"
-                                    onclick="document.querySelector('#cleaner-dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
-                                    Start Cleaning
-                                </button>
                             </div>
                         </aside>
                     </div>
@@ -396,35 +207,18 @@
         </section>
 
         <footer class="footer">
-            <div class="container footer__inner">
-                <div class="footer__left">
-                    <span class="footer__brand"
-                        style="background: linear-gradient(90deg, #7c3aed, #06b6d4); -webkit-background-clip: text; color: transparent; font-weight: 900;">AI
-                        Service Hub</span>
-                    <span class="footer__sep">|</span>
-                    <span class="footer__muted" style="font-size: 12px; opacity: 0.5;">v2.5 Premium</span>
-                </div>
-                <div class="footer__right footer__muted">
-                    © <span id="year">2026</span>
+            <div class="container footer__bottom">
+                <span>© 2026 crompt.ai Inc.</span>
+                <div class="footer-socials">
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">GitHub</a>
                 </div>
             </div>
         </footer>
     </main>
 
     <script src="/static/js/index.js"></script>
-    <script>
-        // Interactive uploader effect
-        const dropzone = document.getElementById('cleaner-dropzone');
-        if (dropzone) {
-            dropzone.addEventListener('mousemove', e => {
-                const rect = dropzone.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                dropzone.style.setProperty('--x', `${x}px`);
-                dropzone.style.setProperty('--y', `${y}px`);
-            });
-        }
-    </script>
 </body>
 
 </html>

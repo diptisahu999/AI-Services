@@ -42,7 +42,7 @@ async def convert_to_art(
 
         # Initialize and call service
         service = ImageToArtService()
-        service.process(tmp_input_path, output_path)
+        service.process(tmp_input_path, output_path, mode=mode or "sketch")
 
         if not output_path.exists():
             raise HTTPException(status_code=500, detail="Processed image was not generated.")

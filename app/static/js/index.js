@@ -141,7 +141,7 @@
       if (!this.selectedFile) return;
 
       this.setStatus("Processing…");
-      this.loader.style.display = "grid";
+      this.loader.style.display = "flex";
       if (this.outputBox) this.outputBox.classList.add("preview__box--scanning");
       this.actionBtn.disabled = true;
       this.resetBtn.disabled = true;
