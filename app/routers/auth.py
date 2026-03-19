@@ -65,15 +65,7 @@ async def login(response: Response, user: UserLogin, db: Session = Depends(get_d
     }
 
 @router.get("/logout")
-async def logout(response: Response):
-    # Aggressively clear the cookie across all layers
-    response.set_cookie(
-        "session_user", 
-        value="", 
-        max_age=0, 
-        expires=0, 
-        path="/", 
-        httponly=True
-    )
+async def logout():
+    response = RedirectResponse(url="/", status_code=302)
     response.delete_cookie("session_user", path="/")
-    return RedirectResponse(url="/login")
+    return response
