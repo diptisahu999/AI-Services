@@ -241,10 +241,101 @@
     }
   }
 
+  class BackgroundMotion {
+    constructor() {
+      this.canvas = document.getElementById('bg-canvas');
+      if (!this.canvas) return;
+      this.ctx = this.canvas.getContext('2d');
+      this.particles = [];
+      this.count = 45;
+      this.mouseX = window.innerWidth / 2;
+      this.mouseY = window.innerHeight / 2;
+
+      window.addEventListener('resize', () => this.resize());
+      window.addEventListener('mousemove', (e) => {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+      });
+
+      this.resize();
+      this.init();
+      this.animate();
+    }
+
+    resize() {
+      this.canvas.width = window.innerWidth;
+      this.canvas.height = window.innerHeight;
+    }
+
+    init() {
+      for (let i = 0; i < this.count; i++) {
+        this.particles.push({
+          x: Math.random() * this.canvas.width,
+          y: Math.random() * this.canvas.height,
+          z: Math.random() * 1000,
+          size: 1.5 + Math.random() * 2,
+          speed: 0.4 + Math.random() * 0.8
+        });
+      }
+    }
+
+    animate() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      const centerX = this.canvas.width / 2;
+      const centerY = this.canvas.height / 2;
+
+      // Mouse-based offset for parallax
+      const offsetX = (this.mouseX - centerX) * 0.02;
+      const offsetY = (this.mouseY - centerY) * 0.02;
+
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+
+        // Move forward (z-axis)
+        p.z -= p.speed;
+        if (p.z < 1) p.z = 1000;
+
+        // Perspective projection
+        const scale = 600 / (600 + p.z);
+        const px = (p.x - centerX) * scale + centerX + offsetX;
+        const py = (p.y - centerY) * scale + centerY + offsetY;
+        const ps = p.size * scale;
+
+        // Draw particle
+        this.ctx.beginPath();
+        this.ctx.arc(px, py, ps, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${scale * 0.5})`;
+        this.ctx.fill();
+
+        // Connect lines
+        for (let j = i + 1; j < this.particles.length; j++) {
+          const p2 = this.particles[j];
+          const scale2 = 600 / (600 + p2.z);
+          const p2x = (p2.x - centerX) * scale2 + centerX + offsetX;
+          const p2y = (p2.y - centerY) * scale2 + centerY + offsetY;
+
+          const dist = Math.sqrt(Math.pow(px - p2x, 2) + Math.pow(py - p2y, 2));
+          if (dist < 180 * scale) {
+            this.ctx.beginPath();
+            this.ctx.lineWidth = 0.5 * scale;
+            this.ctx.strokeStyle = `rgba(124, 58, 237, ${(1 - dist / (180 * scale)) * 0.2 * scale})`;
+            this.ctx.moveTo(px, py);
+            this.ctx.lineTo(p2x, p2y);
+            this.ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+
   // Initialize Services - Wrapped in DOMContentLoaded to be safe
   document.addEventListener('DOMContentLoaded', () => {
     new ServiceUI('cleaner', '/api/image-cleaner/clean');
     new ServiceUI('art', '/api/image-to-art');
+    new BackgroundMotion();
   });
 
 })();
