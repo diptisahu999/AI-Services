@@ -24,3 +24,8 @@ async def art_page(request: Request):
 @router.get('/pricing', response_class=HTMLResponse)
 async def pricing_page(request: Request):
     return templates.TemplateResponse('pricing.html', {'request': request})
+
+
+@router.get('/invite', response_class=HTMLResponse)
+async def invite_page(request: Request):
+    return templates.TemplateResponse('invite.html', {'request': request})

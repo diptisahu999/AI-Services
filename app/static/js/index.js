@@ -336,6 +336,19 @@
     new ServiceUI('cleaner', '/api/image-cleaner/clean');
     new ServiceUI('art', '/api/image-to-art');
     new BackgroundMotion();
+
+    // Profile dropdown toggle
+    const avatar = document.getElementById('user-avatar');
+    const dropdown = document.getElementById('profile-dropdown');
+    if (avatar && dropdown) {
+      avatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('is-active');
+      });
+      document.addEventListener('click', () => {
+        dropdown.classList.remove('is-active');
+      });
+    }
   });
 
 })();

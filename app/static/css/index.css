@@ -475,55 +475,62 @@ a {
 }
 
 .service-card {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.015);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: 48px;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+  gap: 16px;
 }
 
-.card-title {
-  font-size: 26px;
+.service-card:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px);
+}
+
+.service-card__icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.service-card__title {
+  font-size: 24px;
   font-weight: 800;
   color: white;
-  margin-bottom: 16px;
 }
 
-.card-desc {
-  color: var(--text-secondary);
-  margin-bottom: 32px;
-  flex: 1;
+.service-card__text {
+  font-size: 16px;
   line-height: 1.6;
+  color: #94a3b8;
+  flex: 1;
 }
 
-.card-footer {
-  display: flex;
-  align-items: center;
-  margin-top: auto;
-}
-
-.card-link {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  font-weight: 700;
-  color: var(--accent2);
-}
-
-.card-link svg {
-  width: 44px;
-  height: 44px;
-  margin-left: auto;
+.btn-try {
+  display: inline-flex;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 99px;
   color: white;
-  transition: transform 0.3s ease;
-  opacity: 0.6;
+  font-weight: 800;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  width: fit-content;
 }
 
-.service-card:hover svg {
-  transform: translateX(8px);
-  opacity: 1;
+.service-card:hover .btn-try {
+  background: white;
+  color: black;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transform: scale(1.05);
 }
 
 /* --- Footer --- */
@@ -1121,6 +1128,296 @@ a {
 .feature-list .check {
   color: var(--accent2);
   font-weight: 900;
+}
+
+/* --- Profile Dropdown --- */
+.user-menu-wrapper {
+  position: relative;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 280px;
+  background: white !important;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  display: none;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.profile-dropdown.is-active {
+  display: block;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.avatar-large {
+  width: 52px;
+  height: 52px;
+  background: black !important;
+  color: white !important;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.profile-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b !important;
+  margin-bottom: 2px;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #64748b !important;
+}
+
+.profile-plan {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.plan-info {
+  font-size: 14px;
+  color: #1e293b !important;
+  font-weight: 600;
+}
+
+/* --- Dark Page (Invite & Others) --- */
+.dark-page {
+  background: #05060f !important;
+  color: white !important;
+}
+
+.dark-page .invite-main {
+  padding: 140px 0 100px;
+}
+
+.dark-page .invite-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dark-page .invite-title {
+  font-size: 58px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: white !important;
+  line-height: normal;
+}
+
+.dark-page .invite-subtitle {
+  font-size: 18px;
+  color: #94a3b8;
+  max-width: 800px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dark-page .invite-title strong {
+  color: white !important;
+  font-weight: 900;
+}
+
+.dark-page .invite-cards {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin: 80px 0;
+}
+
+.dark-page .invite-reward-card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 60px 40px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.dark-page .reward-icon {
+  font-size: 64px;
+  margin-bottom: 8px;
+}
+
+.dark-page .invite-reward-card h3 {
+  color: white !important;
+}
+
+.dark-page .reward-amount {
+  font-size: 20px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.dark-page .invite-arrow-v2 {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dark-page .invite-arrow-v2 svg {
+  width: 32px;
+  height: 32px;
+}
+
+.dark-page .invite-link-v2 {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 760px;
+  margin: 40px auto;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  text-align: left;
+}
+
+.dark-page .msg-text {
+  color: white !important;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.dark-page .url-text {
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.btn-center-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.dark-page .btn-copy-v2 {
+  background: white;
+  color: black;
+  border: none;
+  padding: 20px 60px;
+  border-radius: 16px;
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-page .btn-copy-v2:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+}
+
+.dark-page .process-title {
+  color: white !important;
+  font-size: 38px;
+  font-weight: 800;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.dark-page .process-grid {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin-top: 50px;
+}
+
+.dark-page .process-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 120px;
+  height: 120px;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+}
+
+.btn-upgrade {
+  background: black !important;
+  color: white !important;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.profile-credits {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  color: #1e293b !important;
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.credits-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.credits-label .icon {
+  color: #f59e0b !important;
+  /* Orange bolt like in img */
+  font-size: 18px;
+}
+
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.profile-menu .menu-item {
+  text-decoration: none;
+  color: #334155 !important;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.profile-menu .logout {
+  color: #64748b !important;
+  font-weight: 600;
 }
 
 /* Backgrounds */

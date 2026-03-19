@@ -232,7 +232,39 @@
           </svg>
           Get Chrome Extension
         </button>
-        <div class="user-avatar">R</div>
+        <div class="user-menu-wrapper">
+          <div class="user-avatar" id="user-avatar">R</div>
+
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profile-dropdown">
+            <div class="profile-header">
+              <div class="avatar-large">R</div>
+              <div class="profile-meta">
+                <div class="profile-name">ranjan</div>
+                <div class="profile-email">sahuranajn7@gmail.com</div>
+              </div>
+            </div>
+
+            <div class="profile-plan">
+              <div class="plan-info">
+                Plan : <strong>Free</strong>
+              </div>
+              <a href="/pricing" class="btn-upgrade">Upgrade</a>
+            </div>
+
+            <div class="profile-credits">
+              <div class="credits-label">
+                <span class="icon">⚡</span> Credits
+              </div>
+              <div class="credits-count">25</div>
+            </div>
+
+            <div class="profile-menu">
+              <a href="/invite" class="menu-item">Invite</a>
+              <a href="#" class="menu-item logout">Logout</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -268,7 +300,7 @@
             <p class="service-card__text">Detect deepfakes, verify identities, and ensure digital authenticity for
               brands.</p>
             <div class="service-card__footer">
-              <span class="service-card__link">Open Tool ↗</span>
+              <span class="btn-try">Try Now</span>
             </div>
           </a>
 
@@ -279,26 +311,20 @@
             <p class="service-card__text">Detect AI-generated art, verify original creations, and maintain artistic
               integrity.</p>
             <div class="service-card__footer">
-              <span class="service-card__link">Open Tool ↗</span>
+              <span class="btn-try">Try Now</span>
             </div>
           </a>
 
           <!-- Image to Art -->
-          <div class="service-card animate-fade-in" style="animation-delay: 0.2s;">
-            <div class="card-icon">🎨</div>
-            <h3 class="card-title">AI Image To Art</h3>
-            <p class="card-desc">Convert your photos into expressive pencil sketches and artistic renditions using
-              advanced neural style transfer algorithms.</p>
-            <div class="card-footer">
-              <a href="/image-to-art" class="card-link">
-                Transform to Art
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
+          <a href="/image-to-art" class="service-card">
+            <div class="service-card__icon">🎨</div>
+            <h3 class="service-card__title">AI Image To Art</h3>
+            <p class="service-card__text">Convert your photos into expressive pencil sketches and artistic renditions
+              using advanced neural style transfer.</p>
+            <div class="service-card__footer">
+              <span class="btn-try">Try Now</span>
             </div>
-          </div>
+          </a>
 
           <!-- Future Tool -->
           <div class="service-card animate-fade-in" style="animation-delay: 0.3s;">
