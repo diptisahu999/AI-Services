@@ -111,7 +111,7 @@
 
     handleFile(file) {
       if (!file.type.startsWith("image/")) {
-        alert("Please upload an image file.");
+        showModal("Invalid File", "Please upload a valid image file (PNG, JPG, etc.).", "📂");
         return;
       }
 
@@ -167,6 +167,14 @@
             const data = await response.json();
             if (data?.detail) message = data.detail;
           } catch (_) { }
+
+          // Special case for insufficient credits: show modal then redirect on click
+          if (response.status === 402) {
+            this.setStatus("Credit limit reached");
+            showModal("Insufficient Credits", message, "⚡", "/pricing");
+            return;
+          }
+
           throw new Error(message);
         }
 
@@ -190,7 +198,7 @@
         console.error(`[ServiceUI] Error in ${this.prefix} process:`, err);
         this.setStatus("Failed");
         this.outputMeta.textContent = err.message || "—";
-        alert(err.message || "Processing failed.");
+        showModal("Processing Error", err.message || "Something went wrong.", "⚠️");
       } finally {
         this.loader.style.display = "none";
         if (this.outputBox) this.outputBox.classList.remove("preview__box--scanning");
@@ -360,5 +368,29 @@
       });
     });
   });
+
+  // Global functions to show/hide modal
+  let nextUrl = null;
+
+  window.showModal = (title, message, icon = "⚡", redirectPath = null) => {
+    const modal = document.getElementById("global-modal");
+    if (!modal) return;
+
+    nextUrl = redirectPath;
+    document.getElementById("modal-title").innerText = title;
+    document.getElementById("modal-message").innerText = message;
+    document.getElementById("modal-icon").innerText = icon;
+    modal.classList.add("is-active");
+  };
+
+  window.closeModal = () => {
+    const modal = document.getElementById("global-modal");
+    if (modal) modal.classList.remove("is-active");
+
+    if (nextUrl) {
+      window.location.href = nextUrl;
+      nextUrl = null;
+    }
+  };
 
 })();

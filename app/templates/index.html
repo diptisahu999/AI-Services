@@ -235,6 +235,9 @@
         </button>
         {% if user %}
         <div class="user-menu-wrapper">
+          <div class="header-credits-pill">
+            <span class="icon">⚡</span> {{ user.credits }}
+          </div>
           <div class="user-avatar" id="user-avatar">{{ user.name[0]|upper }}</div>
 
           <!-- Profile Dropdown -->
@@ -409,6 +412,16 @@
   </div>
 
   <script src="/static/js/index.js"></script>
+
+  <!-- Global Modal -->
+  <div class="modal-overlay" id="global-modal">
+    <div class="modal-content">
+      <div class="modal-icon" id="modal-icon">⚡</div>
+      <h3 class="modal-title" id="modal-title">Notification</h3>
+      <p class="modal-message" id="modal-message">Message goes here...</p>
+      <button class="btn-modal" onclick="closeModal()">Got it</button>
+    </div>
+  </div>
 </body>
 
 </html>
