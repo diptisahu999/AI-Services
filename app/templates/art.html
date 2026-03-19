@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Image To Art - AI Service</title>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="service-page">
+    <div class="bg" aria-hidden="true">
+        <div class="bg__grid"></div>
+        <div class="bg__aurora bg__aurora--a"></div>
+        <div class="bg__aurora bg__aurora--b"></div>
+        <div class="bg__aurora bg__aurora--c"></div>
+    </div>
+
+    <header class="header">
+        <div class="container header__inner">
+            <a class="brand" href="/">
+                <span class="brand__mark" aria-hidden="true"></span>
+                <span class="brand__text">AI Image To Art</span>
+            </a>
+            <div class="header__actions">
+                <a href="/" class="btn btn--ghost">← Back to Services</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="services" class="section">
+            <div class="container">
+                <!-- AI Image To Art -->
+                <section class="service-block" id="service-art">
+                    <div class="service-split">
+                        <!-- Left: Working panel -->
+                        <div class="work-card" id="art-panel">
+                            <div class="work-card__head">
+                                <div class="service-badge">
+                                    <span class="service-badge__icon" aria-hidden="true">🎨</span>
+                                    <span class="service-badge__text">AI Image To Art</span>
+                                </div>
+                                <div class="work-card__status" id="art-statusPill">Idle</div>
+                            </div>
+
+                            <div class="work-card__body">
+                                <input id="art-fileInput" type="file" accept="image/*" hidden />
+                                <div class="uploader" id="art-dropzone" tabindex="0" role="button"
+                                    aria-label="Upload image">
+                                    <div class="uploader__icon" aria-hidden="true">⬆</div>
+                                    <div class="uploader__title">Upload an image</div>
+                                    <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
+                                </div>
+
+                                <div class="controls">
+                                    <div class="control">
+                                        <label class="label">Artistic style</label>
+                                        <div class="seg">
+                                            <button class="seg__btn is-on" data-mode="pencil" type="button">Pencil
+                                                Sketch</button>
+                                            <button class="seg__btn" data-mode="oil" type="button" disabled>Oil Paint
+                                                (Soon)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="actions">
+                                    <button class="btn btn--primary btn--wide" id="art-btn" type="button" disabled>
+                                        Convert to Art
+                                        <span class="btn__shine" aria-hidden="true"></span>
+                                    </button>
+                                    <button class="btn btn--ghost" id="art-resetBtn" type="button"
+                                        disabled>Reset</button>
+                                </div>
+
+                                <div class="preview">
+                                    <div class="preview__pane">
+                                        <div class="preview__top">
+                                            <span class="preview__title">Original</span>
+                                            <span class="preview__meta" id="art-origMeta">—</span>
+                                        </div>
+                                        <div class="preview__box">
+                                            <img id="art-origImg" alt="Original preview" />
+                                            <div class="empty" id="art-origEmpty">
+                                                No image selected
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="preview__pane">
+                                        <div class="preview__top">
+                                            <span class="preview__title">Art Result</span>
+                                            <span class="preview__meta" id="art-outputMeta">—</span>
+                                        </div>
+                                        <div class="preview__box preview__box--glow">
+                                            <img id="art-outputImg" alt="Art preview" />
+                                            <div class="empty" id="art-outputEmpty">
+                                                Click “Convert to Art” to generate output
+                                            </div>
+
+                                            <div class="loader" id="art-loader" aria-hidden="true">
+                                                <div class="loader__ring"></div>
+                                                <div class="loader__text">Transforming…</div>
+                                            </div>
+                                        </div>
+                                        <div class="preview__actions">
+                                            <a id="art-downloadBtn" class="btn btn--ghost preview__download" href="#"
+                                                download="artistic-image.png" style="display:none;">
+                                                Download Art
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="note">
+                                    Clicking “Convert to Art” transforms your image into a beautiful pencil sketch using
+                                    our AI service.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Description -->
+                        <aside class="desc-card">
+                            <div class="desc-card__glow" aria-hidden="true"></div>
+                            <h3 class="desc-card__title">AI Image To Art</h3>
+                            <p class="desc-card__text">
+                                Turn your photos into masterworks. Our AI analyzes the structure of your image to create
+                                stunning
+                                artistic
+                                renditions.
+                            </p>
+
+                            <div class="desc-points">
+                                <div class="point">
+                                    <div class="point__icon" aria-hidden="true">✏️</div>
+                                    <div>
+                                        <div class="point__title">Pencil Sketch</div>
+                                        <div class="point__text">Detailed pencil shading and strokes.</div>
+                                    </div>
+                                </div>
+                                <div class="point">
+                                    <div class="point__icon" aria-hidden="true">🎨</div>
+                                    <div>
+                                        <div class="point__title">Multiple Styles</div>
+                                        <div class="point__text">More artistic filters coming soon.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="desc-cta">
+                                <button class="btn btn--primary btn--wide" type="button"
+                                    onclick="document.querySelector('#art-dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
+                                    Start Creating
+                                    <span class="btn__shine" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container footer__inner">
+                <div class="footer__left">
+                    <span class="footer__brand">AI Service</span>
+                    <span class="footer__sep">•</span>
+                </div>
+                <div class="footer__right footer__muted">
+                    © <span id="year">2026</span>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>
