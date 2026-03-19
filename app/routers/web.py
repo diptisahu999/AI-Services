@@ -29,3 +29,8 @@ async def pricing_page(request: Request):
 @router.get('/invite', response_class=HTMLResponse)
 async def invite_page(request: Request):
     return templates.TemplateResponse('invite.html', {'request': request})
+
+
+@router.get('/chat', response_class=HTMLResponse)
+async def chat_page(request: Request):
+    return templates.TemplateResponse('chat.html', {'request': request})
