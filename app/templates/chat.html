@@ -210,6 +210,8 @@
             gap: 8px;
             padding-top: 12px;
             border-top: 1px solid var(--border-dark);
+            position: relative;
+            cursor: pointer;
         }
 
         .avatar-small {
@@ -774,16 +776,34 @@
                 <div class="credits-card">
                     <div class="credits-head">
                         <span class="icon">⚡</span> Credits
-                        <span>25</span>
+                        <span>{{ user.credits }}</span>
                     </div>
-                    <button class="btn-upgrade-plan">👑 UPGRADE PLAN</button>
+                    <button class="btn-upgrade-plan" onclick="window.location.href='/pricing'">👑 UPGRADE PLAN</button>
                 </div>
-                <div class="user-profile">
-                    <div class="avatar-small">R</div>
+                <div class="user-profile" id="sidebar-avatar-btn">
+                    <div class="avatar-small">{{ user.name[0]|upper }}</div>
                     <div class="user-actions">
                         <span class="action-icon">🖥️</span>
                         <span class="action-icon">🌙</span>
                         <span class="action-icon">⚙️</span>
+                    </div>
+
+                    <!-- Sidebar Profile Dropdown -->
+                    <div class="profile-dropdown" id="sidebar-profile-dropdown"
+                        style="bottom: 100%; top: auto; left: 0; margin-bottom: 20px;">
+                        <div class="profile-header">
+                            <div class="avatar-large">{{ user.name[0]|upper }}</div>
+                            <div class="profile-meta">
+                                <div class="profile-name">{{ user.name }}</div>
+                                <div class="profile-email">{{ user.email }}</div>
+                            </div>
+                        </div>
+
+                        <div class="profile-menu">
+                            <a href="/pricing" class="menu-item">Pricing</a>
+                            <a href="/invite" class="menu-item">Invite</a>
+                            <a href="/api/auth/logout" class="menu-item logout">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -801,7 +821,7 @@
                     Deep Research <span>›</span>
                 </div>
 
-                <h1 class="greeting-title">Hi ranjan, How are you?</h1>
+                <h1 class="greeting-title">Hi {{ user.name }}, How are you?</h1>
                 <p class="greeting-sub">How can I help you today?</p>
 
                 <div class="chat-box-wrapper">

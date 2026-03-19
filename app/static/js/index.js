@@ -348,15 +348,29 @@
     // Profile dropdown toggle
     const avatar = document.getElementById('user-avatar');
     const dropdown = document.getElementById('profile-dropdown');
+    const sidebarAvatar = document.getElementById('sidebar-avatar-btn');
+    const sidebarDropdown = document.getElementById('sidebar-profile-dropdown');
+
     if (avatar && dropdown) {
       avatar.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdown.classList.toggle('is-active');
-      });
-      document.addEventListener('click', () => {
-        dropdown.classList.remove('is-active');
+        if (sidebarDropdown) sidebarDropdown.classList.remove('is-active');
       });
     }
+
+    if (sidebarAvatar && sidebarDropdown) {
+      sidebarAvatar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebarDropdown.classList.toggle('is-active');
+        if (dropdown) dropdown.classList.remove('is-active');
+      });
+    }
+
+    document.addEventListener('click', () => {
+      if (dropdown) dropdown.classList.remove('is-active');
+      if (sidebarDropdown) sidebarDropdown.classList.remove('is-active');
+    });
 
     // Explicit logout handler to ensure navigation happens
     const logoutBtns = document.querySelectorAll('.menu-item.logout');
