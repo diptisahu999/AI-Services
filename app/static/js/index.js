@@ -254,16 +254,10 @@
       this.canvas = document.getElementById('bg-canvas');
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
-      this.particles = [];
+      this.bubbles = [];
       this.count = 45;
-      this.mouseX = window.innerWidth / 2;
-      this.mouseY = window.innerHeight / 2;
 
       window.addEventListener('resize', () => this.resize());
-      window.addEventListener('mousemove', (e) => {
-        this.mouseX = e.clientX;
-        this.mouseY = e.clientY;
-      });
 
       this.resize();
       this.init();
@@ -277,12 +271,12 @@
 
     init() {
       for (let i = 0; i < this.count; i++) {
-        this.particles.push({
-          x: Math.random() * this.canvas.width,
-          y: Math.random() * this.canvas.height,
-          z: Math.random() * 1000,
-          size: 1.5 + Math.random() * 2,
-          speed: 0.4 + Math.random() * 0.8
+        this.bubbles.push({
+          x: (Math.random() - 0.5) * 3000,
+          y: (Math.random() - 0.5) * 3000,
+          z: Math.random() * 2000,
+          size: 15 + Math.random() * 30,
+          speed: 0.5 + Math.random() * 2.0
         });
       }
     }
@@ -293,46 +287,47 @@
       const centerX = this.canvas.width / 2;
       const centerY = this.canvas.height / 2;
 
-      // Mouse-based offset for parallax
-      const offsetX = (this.mouseX - centerX) * 0.02;
-      const offsetY = (this.mouseY - centerY) * 0.02;
+      // Sort bubbles by depth to draw furthest first
+      this.bubbles.sort((a, b) => b.z - a.z);
 
-      for (let i = 0; i < this.particles.length; i++) {
-        const p = this.particles[i];
+      for (let i = 0; i < this.bubbles.length; i++) {
+        const p = this.bubbles[i];
 
-        // Move forward (z-axis)
-        p.z -= p.speed;
-        if (p.z < 1) p.z = 1000;
+        // Move float naturally upwards
+        p.y -= p.speed;
+        if (p.y < -1500) p.y = 1500;
 
         // Perspective projection
-        const scale = 600 / (600 + p.z);
-        const px = (p.x - centerX) * scale + centerX + offsetX;
-        const py = (p.y - centerY) * scale + centerY + offsetY;
+        // Offset z to be in front of camera
+        const zOffset = p.z + 1000;
+        if (zOffset < 1) continue;
+
+        const scale = 800 / zOffset;
+        const px = p.x * scale + centerX;
+        const py = p.y * scale + centerY;
         const ps = p.size * scale;
 
-        // Draw particle
+        // Draw 3D Bubble
         this.ctx.beginPath();
         this.ctx.arc(px, py, ps, 0, Math.PI * 2);
-        this.ctx.fillStyle = `rgba(255, 255, 255, ${scale * 0.5})`;
+
+        // Radial gradient for 3D bubble effect
+        const gradient = this.ctx.createRadialGradient(
+          px - ps * 0.3, py - ps * 0.3, ps * 0.1,
+          px, py, ps
+        );
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${Math.min(1, scale * 0.7)})`);
+        gradient.addColorStop(0.3, `rgba(142, 117, 255, ${Math.min(1, scale * 0.4)})`);
+        gradient.addColorStop(0.8, `rgba(80, 50, 200, ${Math.min(1, scale * 0.1)})`);
+        gradient.addColorStop(1, `rgba(108, 71, 255, ${Math.min(1, scale * 0.5)})`);
+
+        this.ctx.fillStyle = gradient;
         this.ctx.fill();
 
-        // Connect lines
-        for (let j = i + 1; j < this.particles.length; j++) {
-          const p2 = this.particles[j];
-          const scale2 = 600 / (600 + p2.z);
-          const p2x = (p2.x - centerX) * scale2 + centerX + offsetX;
-          const p2y = (p2.y - centerY) * scale2 + centerY + offsetY;
-
-          const dist = Math.sqrt(Math.pow(px - p2x, 2) + Math.pow(py - p2y, 2));
-          if (dist < 180 * scale) {
-            this.ctx.beginPath();
-            this.ctx.lineWidth = 0.5 * scale;
-            this.ctx.strokeStyle = `rgba(124, 58, 237, ${(1 - dist / (180 * scale)) * 0.2 * scale})`;
-            this.ctx.moveTo(px, py);
-            this.ctx.lineTo(p2x, p2y);
-            this.ctx.stroke();
-          }
-        }
+        // Bubble outline
+        this.ctx.lineWidth = Math.max(0.5, scale * 1.5);
+        this.ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, scale * 0.6)})`;
+        this.ctx.stroke();
       }
 
       requestAnimationFrame(() => this.animate());
