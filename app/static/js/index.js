@@ -25,6 +25,8 @@
       this.downloadBtn = document.getElementById(`${prefix}-downloadBtn`);
       this.origMeta = document.getElementById(`${prefix}-origMeta`);
       this.outputMeta = document.getElementById(`${prefix}-outputMeta`);
+      this.outputBox = document.getElementById(`${prefix}-outputBox`) || this.outputImg?.parentElement;
+
 
       this.strengthInput = document.getElementById(`${prefix}-strength`);
       this.strengthVal = document.getElementById(`${prefix}-strengthVal`);
@@ -140,8 +142,10 @@
 
       this.setStatus("Processing…");
       this.loader.style.display = "grid";
+      if (this.outputBox) this.outputBox.classList.add("preview__box--scanning");
       this.actionBtn.disabled = true;
       this.resetBtn.disabled = true;
+
 
       try {
         const formData = new FormData();
@@ -189,6 +193,7 @@
         alert(err.message || "Processing failed.");
       } finally {
         this.loader.style.display = "none";
+        if (this.outputBox) this.outputBox.classList.remove("preview__box--scanning");
         this.actionBtn.disabled = false;
         this.resetBtn.disabled = false;
       }

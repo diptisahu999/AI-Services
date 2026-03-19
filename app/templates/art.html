@@ -4,13 +4,188 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Image To Art - AI Service</title>
+    <title>AI Image To Art - Premium Artistic Transformation</title>
     <link rel="stylesheet" href="/static/css/index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <style>
+        :root {
+            --glass-grad: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+        }
+
+        .service-page {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .premium-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 99px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #a78bfa;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .work-card {
+            background: var(--glass-grad);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .work-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 50px 120px -20px rgba(0, 0, 0, 0.7);
+        }
+
+        .uploader {
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .uploader:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .uploader::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(139, 92, 246, 0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .uploader:hover::after {
+            opacity: 1;
+        }
+
+        .preview__pane {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .preview__top {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .desc-card {
+            background: linear-gradient(165deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .point {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .point:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .btn--primary {
+            background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.5);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.6);
+        }
+
+        .btn--primary:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shimmer-btn::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
+            animation: shimmer 3s infinite linear;
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(30deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(30deg);
+            }
+        }
+
+        .preview__box--glow::after {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.4), transparent);
+            animation: none;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .preview__box--scanning::after {
+            animation: scan 2.5s infinite linear;
+        }
+
+        @keyframes scan {
+            0% {
+                top: -100%;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .loader__ring {
+            border-top-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            width: 48px;
+            height: 48px;
+            border-width: 4px;
+        }
+    </style>
 </head>
 
 <body class="service-page">
@@ -28,12 +203,16 @@
                 <span class="brand__text">AI Image To Art</span>
             </a>
             <div class="header__actions">
-                <a href="/" class="btn btn--ghost">← Back to Services</a>
+                <a href="/" class="btn btn--ghost shine-hover">← Back to Services</a>
             </div>
         </div>
     </header>
 
     <main>
+        <div class="hero-orb"
+            style="position: fixed; top: 20%; right: 10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%); filter: blur(60px); z-index: -1;">
+        </div>
+
         <section id="services" class="section">
             <div class="container">
                 <!-- AI Image To Art -->
@@ -43,8 +222,11 @@
                         <div class="work-card" id="art-panel">
                             <div class="work-card__head">
                                 <div class="service-badge">
-                                    <span class="service-badge__icon" aria-hidden="true">🎨</span>
-                                    <span class="service-badge__text">AI Image To Art</span>
+                                    <span class="service-badge__icon"
+                                        style="background: rgba(124, 58, 237, 0.1); border-color: rgba(124, 58, 237, 0.3);"
+                                        aria-hidden="true">🎨</span>
+                                    <span class="service-badge__text"
+                                        style="font-weight: 800; letter-spacing: -0.01em;">AI Image To Art</span>
                                 </div>
                                 <div class="work-card__status" id="art-statusPill">Idle</div>
                             </div>
@@ -53,14 +235,28 @@
                                 <input id="art-fileInput" type="file" accept="image/*" hidden />
                                 <div class="uploader" id="art-dropzone" tabindex="0" role="button"
                                     aria-label="Upload image">
-                                    <div class="uploader__icon" aria-hidden="true">⬆</div>
-                                    <div class="uploader__title">Upload an image</div>
-                                    <div class="uploader__sub">Drag & drop here, or click to browse (PNG/JPG/WebP)</div>
+                                    <div class="uploader__icon" style="font-size: 24px; color: var(--accent);"
+                                        aria-hidden="true">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <polyline points="17 8 12 3 7 8" />
+                                            <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg>
+                                    </div>
+                                    <div class="uploader__title" style="font-size: 18px; margin-bottom: 4px;">Upload an
+                                        image</div>
+                                    <div class="uploader__sub" style="opacity: 0.6;">Drag & drop here, or click to
+                                        browse (PNG/JPG/WebP)</div>
                                 </div>
 
                                 <div class="controls">
-                                    <div class="control">
-                                        <label class="label">Artistic style</label>
+                                    <div class="control"
+                                        style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05);">
+                                        <label class="label"
+                                            style="font-weight: 700; color: rgba(255,255,255,0.8);">Artistic
+                                            style</label>
                                         <div class="seg">
                                             <button class="seg__btn is-on" data-mode="pencil" type="button">Pencil
                                                 Sketch</button>
@@ -71,93 +267,106 @@
                                 </div>
 
                                 <div class="actions">
-                                    <button class="btn btn--primary btn--wide" id="art-btn" type="button" disabled>
+                                    <button class="btn btn--primary btn--wide shimmer-btn" id="art-btn" type="button"
+                                        disabled>
                                         Convert to Art
-                                        <span class="btn__shine" aria-hidden="true"></span>
                                     </button>
                                     <button class="btn btn--ghost" id="art-resetBtn" type="button"
                                         disabled>Reset</button>
                                 </div>
 
-                                <div class="preview">
+                                <div class="preview" style="gap: 20px;">
                                     <div class="preview__pane">
                                         <div class="preview__top">
-                                            <span class="preview__title">Original</span>
+                                            <span class="preview__title" style="font-weight: 700;">Original</span>
                                             <span class="preview__meta" id="art-origMeta">—</span>
                                         </div>
                                         <div class="preview__box">
                                             <img id="art-origImg" alt="Original preview" />
-                                            <div class="empty" id="art-origEmpty">
+                                            <div class="empty" id="art-origEmpty" style="padding: 40px 20px;">
+                                                <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.3;">🖼️
+                                                </div>
                                                 No image selected
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="preview__pane">
+                                    <div class="preview__pane" style="border-color: rgba(6, 182, 212, 0.2);">
                                         <div class="preview__top">
-                                            <span class="preview__title">Art Result</span>
+                                            <span class="preview__title"
+                                                style="font-weight: 700; color: var(--secondary);">Art Result</span>
                                             <span class="preview__meta" id="art-outputMeta">—</span>
                                         </div>
                                         <div class="preview__box preview__box--glow">
                                             <img id="art-outputImg" alt="Art preview" />
-                                            <div class="empty" id="art-outputEmpty">
+                                            <div class="empty" id="art-outputEmpty" style="padding: 40px 20px;">
+                                                <div style="font-size: 32px; margin-bottom: 12px; opacity: 0.3;">✨</div>
                                                 Click “Convert to Art” to generate output
                                             </div>
 
-                                            <div class="loader" id="art-loader" aria-hidden="true">
-                                                <div class="loader__ring"></div>
-                                                <div class="loader__text">Transforming…</div>
+                                            <div class="loader" id="art-loader" aria-hidden="true"
+                                                style="background: rgba(0,0,0,0.6);">
+                                                <div class="loader__ring"
+                                                    style="width: 50px; height: 50px; border-width: 4px;"></div>
+                                                <div class="loader__text" style="font-size: 16px; margin-top: 15px;">
+                                                    Transforming…</div>
                                             </div>
                                         </div>
                                         <div class="preview__actions">
-                                            <a id="art-downloadBtn" class="btn btn--ghost preview__download" href="#"
-                                                download="artistic-image.png" style="display:none;">
+                                            <a id="art-downloadBtn"
+                                                class="btn btn--primary preview__download shimmer-btn" href="#"
+                                                download="artistic-image.png"
+                                                style="display:none; width: 100%; border-radius: 12px;">
                                                 Download Art
                                             </a>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="note">
+                                <div class="note"
+                                    style="margin-top: 20px; text-align: center; font-style: italic; opacity: 0.7;">
                                     Clicking “Convert to Art” transforms your image into a beautiful pencil sketch using
-                                    our AI service.
+                                    our neural engine.
                                 </div>
                             </div>
                         </div>
 
                         <!-- Right: Description -->
-                        <aside class="desc-card">
-                            <div class="desc-card__glow" aria-hidden="true"></div>
-                            <h3 class="desc-card__title">AI Image To Art</h3>
-                            <p class="desc-card__text">
+                        <aside class="desc-card" style="padding: 30px;">
+                            <div class="premium-badge">Next-Gen AI</div>
+                            <h3 class="desc-card__title"
+                                style="font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 16px;">AI
+                                Image To Art</h3>
+                            <p class="desc-card__text"
+                                style="font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 24px;">
                                 Turn your photos into masterworks. Our AI analyzes the structure of your image to create
-                                stunning
-                                artistic
-                                renditions.
+                                stunning artistic renditions in seconds.
                             </p>
 
-                            <div class="desc-points">
-                                <div class="point">
-                                    <div class="point__icon" aria-hidden="true">✏️</div>
+                            <div class="desc-points" style="gap: 16px;">
+                                <div class="point" style="border-radius: 16px; padding: 16px;">
+                                    <div class="point__icon" style="font-size: 20px;" aria-hidden="true">✏️</div>
                                     <div>
-                                        <div class="point__title">Pencil Sketch</div>
-                                        <div class="point__text">Detailed pencil shading and strokes.</div>
+                                        <div class="point__title" style="font-size: 16px;">Pencil Sketch</div>
+                                        <div class="point__text" style="font-size: 14px; opacity: 0.7;">Detailed pencil
+                                            shading and strokes.</div>
                                     </div>
                                 </div>
-                                <div class="point">
-                                    <div class="point__icon" aria-hidden="true">🎨</div>
+                                <div class="point" style="border-radius: 16px; padding: 16px;">
+                                    <div class="point__icon" style="font-size: 20px;" aria-hidden="true">🎨</div>
                                     <div>
-                                        <div class="point__title">Multiple Styles</div>
-                                        <div class="point__text">More artistic filters coming soon.</div>
+                                        <div class="point__title" style="font-size: 16px;">Multiple Styles</div>
+                                        <div class="point__text" style="font-size: 14px; opacity: 0.7;">More artistic
+                                            filters coming soon.</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="desc-cta">
-                                <button class="btn btn--primary btn--wide" type="button"
+                            <div class="desc-cta" style="margin-top: 32px;">
+                                <button class="btn btn--primary btn--wide shimmer-btn" type="button"
+                                    style="padding: 18px;"
                                     onclick="document.querySelector('#art-dropzone')?.scrollIntoView({behavior:'smooth', block:'center'})">
                                     Start Creating
-                                    <span class="btn__shine" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </aside>
@@ -169,8 +378,11 @@
         <footer class="footer">
             <div class="container footer__inner">
                 <div class="footer__left">
-                    <span class="footer__brand">AI Service</span>
-                    <span class="footer__sep">•</span>
+                    <span class="footer__brand"
+                        style="background: linear-gradient(90deg, #7c3aed, #06b6d4); -webkit-background-clip: text; color: transparent; font-weight: 900;">AI
+                        Service Hub</span>
+                    <span class="footer__sep">|</span>
+                    <span class="footer__muted" style="font-size: 12px; opacity: 0.5;">v2.5 Premium</span>
                 </div>
                 <div class="footer__right footer__muted">
                     © <span id="year">2026</span>
@@ -180,6 +392,19 @@
     </main>
 
     <script src="/static/js/index.js"></script>
+    <script>
+        // Interactive uploader effect
+        const dropzone = document.getElementById('art-dropzone');
+        if (dropzone) {
+            dropzone.addEventListener('mousemove', e => {
+                const rect = dropzone.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                dropzone.style.setProperty('--x', `${x}px`);
+                dropzone.style.setProperty('--y', `${y}px`);
+            });
+        }
+    </script>
 </body>
 
 </html>
