@@ -1,9 +1,12 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Form
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form, Request, Depends
 from fastapi.responses import Response
 from typing import Optional
+from sqlalchemy.orm import Session
 from app.services.image_to_Art import ImageToArtService
 from app.config import settings
 from app.utils.file_ops import ensure_dir, safe_remove
+from app.database import get_db
+from app.models import User as DBUser
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from uuid import uuid4
@@ -12,9 +15,25 @@ router = APIRouter(prefix="/api/image-to-art", tags=["Image to Art"])
 
 @router.post("")
 async def convert_to_art(
+    request: Request,
     file: UploadFile = File(...),
-    mode: Optional[str] = Form(None)
+    mode: Optional[str] = Form(None),
+    db: Session = Depends(get_db)
 ):
+    # --- Authentication & Credit Check ---
+    email = request.cookies.get("session_user")
+    if not email:
+        raise HTTPException(status_code=401, detail="Please login to use this service.")
+    
+    user = db.query(DBUser).filter(DBUser.email == email).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found.")
+    
+    CREDIT_COST = 5
+    if user.credits < CREDIT_COST:
+        raise HTTPException(status_code=402, detail=f"Insufficient credits. This service costs {CREDIT_COST} credits.")
+    # ------------------------------------
+
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Uploaded file is not an image.")
 
@@ -49,6 +68,10 @@ async def convert_to_art(
 
         output_bytes = output_path.read_bytes()
         media_type = file.content_type if file.content_type in {"image/png", "image/jpeg", "image/webp"} else "image/png"
+
+        # Deduct credits upon successful processing
+        user.credits -= CREDIT_COST
+        db.commit()
 
         return Response(content=output_bytes, media_type=media_type)
 

@@ -349,6 +349,16 @@
         dropdown.classList.remove('is-active');
       });
     }
+
+    // Explicit logout handler to ensure navigation happens
+    const logoutBtns = document.querySelectorAll('.menu-item.logout');
+    logoutBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation(); // Stop dropdown from toggling before navigation
+        // Force navigation to ensure the server receives the logout request
+        window.location.href = btn.href;
+      });
+    });
   });
 
 })();

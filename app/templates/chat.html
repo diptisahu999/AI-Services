@@ -668,16 +668,17 @@
                     </svg>
                     Get Chrome Extension
                 </button>
+                {% if user %}
                 <div class="user-menu-wrapper">
-                    <div class="user-avatar" id="user-avatar">R</div>
+                    <div class="user-avatar" id="user-avatar">{{ user.name[0]|upper }}</div>
 
                     <!-- Profile Dropdown -->
                     <div class="profile-dropdown" id="profile-dropdown">
                         <div class="profile-header">
-                            <div class="avatar-large">R</div>
+                            <div class="avatar-large">{{ user.name[0]|upper }}</div>
                             <div class="profile-meta">
-                                <div class="profile-name">ranjan</div>
-                                <div class="profile-email">sahuranajn7@gmail.com</div>
+                                <div class="profile-name">{{ user.name }}</div>
+                                <div class="profile-email">{{ user.email }}</div>
                             </div>
                         </div>
 
@@ -692,15 +693,23 @@
                             <div class="credits-label">
                                 <span class="icon">⚡</span> Credits
                             </div>
-                            <div class="credits-count">25</div>
+                            <div class="credits-count">{{ user.credits }}</div>
                         </div>
 
                         <div class="profile-menu">
                             <a href="/invite" class="menu-item">Invite</a>
-                            <a href="#" class="menu-item logout">Logout</a>
+                            <a href="/api/auth/logout" class="menu-item logout">Logout</a>
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <div class="auth-buttons" style="display: flex; gap: 12px; align-items: center;">
+                    <a href="/login" style="color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;">Sign
+                        In</a>
+                    <a href="/register" class="btn-primary"
+                        style="padding: 8px 12px; font-size: 14px; border-radius: 10px;">Sign Up</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </header>

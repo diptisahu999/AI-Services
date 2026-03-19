@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register - Visora AI</title>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body.auth-page {
+            background: #0b0e14;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient background glow */
+        .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(142, 117, 255, 0.15) 0%, rgba(11, 14, 20, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(80px);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(22, 27, 34, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            text-decoration: none;
+        }
+
+        .auth-logo {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            color: #000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 24px;
+        }
+
+        .auth-brand span {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-header h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .auth-header p {
+            color: #8b949e;
+            font-size: 15px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #c9d1d9;
+            font-size: 14px;
+            font-weight: 600;
+            padding-left: 4px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #8e75ff;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(142, 117, 255, 0.15);
+        }
+
+        .btn-auth {
+            background: linear-gradient(135deg, #8e75ff 0%, #6c47ff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 71, 255, 0.3);
+        }
+
+        .auth-footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #8b949e;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: #8e75ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            color: #f87171;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(52, 211, 153, 0.1);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            color: #34d399;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+    <div class="ambient-glow" style="top: -100px; left: -100px;"></div>
+    <div class="ambient-glow" style="bottom: -100px; right: -100px;"></div>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <a href="/" class="auth-brand">
+                <div class="auth-logo">V</div>
+                <span>Visora AI</span>
+            </a>
+            <h1>Create Account</h1>
+            <p>Start your advanced AI journey today.</p>
+        </div>
+
+        <div id="register-error" class="error-message">Registration failed. Try again.</div>
+        <div id="register-success" class="success-message">Account created! Redirecting to login...</div>
+
+        <form class="auth-form" id="register-form">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <div class="input-wrapper">
+                    <input type="text" id="name" placeholder="Ranjan Sahu" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-wrapper">
+                    <input type="email" id="email" placeholder="name@example.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-auth">Register</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="/login">Sign In</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                if (response.ok) {
+                    successDiv.style.display = 'block';
+                    successDiv.textContent = 'Account created! Entering the lab...';
+                    errorDiv.style.display = 'none';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1500);
+                } else {
+                    const data = await response.json();
+                    errorDiv.style.display = 'block';
+                    errorDiv.textContent = data.detail || 'Registration failed.';
+                }
+            } catch (err) {
+                errorDiv.style.display = 'block';
+                errorDiv.textContent = 'Something went wrong. Please try later.';
+            }
+        });
+    </script>
+</body>
+
+</html>
