@@ -10,8 +10,11 @@ HOST = os.getenv('HOST', '127.0.0.1')
 PORT = int(os.getenv('PORT', '8000'))
 DEBUG = os.getenv('DEBUG', 'true').lower() == 'true'
 MAX_UPLOAD_SIZE_MB = int(os.getenv('MAX_UPLOAD_SIZE_MB', '15'))
-TEMP_DIR = Path(os.getenv('TEMP_DIR', str(BASE_DIR / 'temp')))
-OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR', str(TEMP_DIR / 'outputs')))
+TEMP_DIR = APP_DIR / 'static' / 'temp'
+OUTPUT_DIR = TEMP_DIR / 'outputs'
+# Ensure directories exist
+TEMP_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Optional model paths. If these are not provided, the service falls back to the original absolute paths in 1.py.
 GFPGAN_MODEL_PATH = os.getenv('GFPGAN_MODEL_PATH', '')

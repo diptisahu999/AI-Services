@@ -20,6 +20,13 @@ class UserLogin(BaseModel):
 def hash_password(password: str):
     return sha256(password.encode()).hexdigest()
 
+from fastapi import Request
+async def get_current_user(request: Request, db: Session = Depends(get_db)):
+    email = request.cookies.get("session_user")
+    if not email:
+        return None
+    return db.query(DBUser).filter(DBUser.email == email).first()
+
 @router.post("/register")
 async def register(response: Response, user: UserRegister, db: Session = Depends(get_db)):
     # Check if user already exists

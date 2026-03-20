@@ -249,9 +249,196 @@
     }
   }
 
+  class InpaintingUI {
+    constructor(prefix, endpoint) {
+      this.prefix = prefix;
+      this.endpoint = endpoint;
+      this.selectedFile = null;
+
+      // Elements
+      this.dropzone = document.getElementById(`${prefix}-dropzone`);
+      this.fileInput = document.getElementById(`${prefix}-fileInput`);
+      this.actionBtn = document.getElementById(`${prefix}-btn`);
+      this.resetBtn = document.getElementById(`${prefix}-resetBtn`);
+      this.statusPill = document.getElementById(`${prefix}-statusPill`);
+      this.loader = document.getElementById(`${prefix}-loader`);
+      this.downloadBtn = document.getElementById(`${prefix}-downloadBtn`);
+      this.outputImg = document.getElementById(`${prefix}-outputImg`);
+      this.outputEmpty = document.getElementById(`${prefix}-outputEmpty`);
+      this.inputEmpty = document.getElementById(`${prefix}-inputEmpty`);
+      this.brushControls = document.getElementById("brush-controls");
+      this.brushSizeInput = document.getElementById("brush-size");
+      this.clearMaskBtn = document.getElementById("clear-mask-btn");
+
+      // Canvases
+      this.displayCanvas = document.getElementById("mask-canvas");
+      this.displayCtx = this.displayCanvas?.getContext("2d");
+
+      // Hidden mask canvas to capture only brush strokes for the API
+      this.maskCanvas = document.createElement("canvas");
+      this.maskCtx = this.maskCanvas.getContext("2d");
+
+      this.isDrawing = false;
+      this.imgElement = new Image();
+
+      if (!this.dropzone || !this.displayCanvas) return;
+      this.init();
+    }
+
+    init() {
+      this.dropzone.addEventListener("click", () => this.fileInput.click());
+      this.fileInput.addEventListener("change", () => {
+        const f = this.fileInput.files?.[0];
+        if (f) this.handleFile(f);
+      });
+
+      this.displayCanvas.addEventListener("mousedown", (e) => this.startDrawing(e));
+      this.displayCanvas.addEventListener("mousemove", (e) => this.draw(e));
+      window.addEventListener("mouseup", () => this.stopDrawing());
+
+      this.displayCanvas.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        this.startDrawing(e.touches[0]);
+      }, { passive: false });
+      this.displayCanvas.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        this.draw(e.touches[0]);
+      }, { passive: false });
+      window.addEventListener("touchend", () => this.stopDrawing());
+
+      this.clearMaskBtn?.addEventListener("click", () => this.clearMask());
+      this.resetBtn?.addEventListener("click", () => this.resetAll());
+      this.actionBtn?.addEventListener("click", () => this.process());
+      this.setStatus("Idle");
+    }
+
+    handleFile(file) {
+      if (!file.type.startsWith("image/")) return;
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.imgElement.onload = () => {
+          this.setupCanvas();
+          this.inputEmpty.style.display = "none";
+          this.brushControls.style.display = "flex";
+          this.actionBtn.disabled = false;
+          this.resetBtn.disabled = false;
+          this.setStatus("Ready to Mask");
+        };
+        this.imgElement.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    setupCanvas() {
+      const maxWidth = this.displayCanvas.parentElement.clientWidth;
+      const maxHeight = 500;
+      let w = this.imgElement.width;
+      let h = this.imgElement.height;
+      this.scaleRatio = Math.min(maxWidth / w, maxHeight / h);
+
+      this.displayCanvas.width = w * this.scaleRatio;
+      this.displayCanvas.height = h * this.scaleRatio;
+
+      // Mask canvas MUST be the exact same size as the original image
+      this.maskCanvas.width = w;
+      this.maskCanvas.height = h;
+
+      this.displayCtx.drawImage(this.imgElement, 0, 0, w * this.scaleRatio, h * this.scaleRatio);
+      this.maskCtx.fillStyle = "black";
+      this.maskCtx.fillRect(0, 0, w, h);
+      this.dropzone.style.display = "none";
+    }
+
+    startDrawing(e) {
+      if (!this.selectedFile) return;
+      this.isDrawing = true;
+      this.draw(e);
+    }
+
+    draw(e) {
+      if (!this.isDrawing) return;
+      const rect = this.displayCanvas.getBoundingClientRect();
+      const x = (e.clientX || e.pageX) - rect.left;
+      const y = (e.clientY || e.pageY) - rect.top;
+
+      const size = this.brushSizeInput.value;
+
+      // Draw on display (screen size)
+      this.displayCtx.lineWidth = size;
+      this.displayCtx.lineCap = "round";
+      this.displayCtx.strokeStyle = "rgba(255, 0, 0, 0.5)";
+      this.displayCtx.lineTo(x, y);
+      this.displayCtx.stroke();
+      this.displayCtx.beginPath();
+      this.displayCtx.moveTo(x, y);
+
+      // Draw on mask (Original image size) - we scale the coordinates
+      const mx = x / this.scaleRatio;
+      const my = y / this.scaleRatio;
+      const mSize = size / this.scaleRatio; // Scale brush size too!
+
+      this.maskCtx.lineWidth = mSize;
+      this.maskCtx.lineCap = "round";
+      this.maskCtx.strokeStyle = "white";
+      this.maskCtx.lineTo(mx, my);
+      this.maskCtx.stroke();
+      this.maskCtx.beginPath();
+      this.maskCtx.moveTo(mx, my);
+    }
+
+    stopDrawing() {
+      this.isDrawing = false;
+      this.displayCtx.beginPath();
+      this.maskCtx.beginPath();
+    }
+
+    clearMask() {
+      const w = this.displayCanvas.width;
+      const h = this.displayCanvas.height;
+      this.displayCtx.drawImage(this.imgElement, 0, 0, w, h);
+
+      // Reset mask to full black (original dimensions)
+      this.maskCtx.fillStyle = "black";
+      this.maskCtx.fillRect(0, 0, this.maskCanvas.width, this.maskCanvas.height);
+    }
+
+    async process() {
+      this.setStatus("Removing Objects…");
+      this.loader.style.display = "flex";
+      this.actionBtn.disabled = true;
+
+      try {
+        const maskBlob = await new Promise(res => this.maskCanvas.toBlob(res, "image/png"));
+        const formData = new FormData();
+        formData.append("file", this.selectedFile);
+        formData.append("mask_file", maskBlob, "mask.png");
+
+        const response = await fetch(this.endpoint, { method: "POST", body: formData });
+        if (!response.ok) throw new Error("Processing failed");
+
+        const data = await response.json();
+        this.outputImg.src = data.output_url;
+        this.outputImg.style.display = "block";
+        this.outputEmpty.style.display = "none";
+        this.downloadBtn.href = data.output_url;
+        this.downloadBtn.style.display = "inline-flex";
+        this.setStatus("Done");
+      } catch (err) {
+        showModal("Error", err.message);
+        this.setStatus("Error");
+      } finally {
+        this.loader.style.display = "none";
+        this.actionBtn.disabled = false;
+      }
+    }
+
+    resetAll() { location.reload(); }
+    setStatus(t) { if (this.statusPill) this.statusPill.textContent = t; }
+  }
+
   class BackgroundMotion {
     constructor() {
-      this.canvas = document.getElementById('bg-canvas');
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
       this.bubbles = [];
@@ -457,6 +644,7 @@
     new ServiceUI('cleaner', '/api/image-cleaner/clean');
     new ServiceUI('art', '/api/image-to-art');
     new TextToImageUI('txt2img', '/api/prompt-to-image');
+    new InpaintingUI('inpainting', '/api/image-inpainting');
     new BackgroundMotion();
 
     // Profile dropdown toggle

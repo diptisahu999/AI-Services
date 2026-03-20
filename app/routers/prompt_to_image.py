@@ -10,27 +10,22 @@ from app.models import User as DBUser
 from pathlib import Path
 from uuid import uuid4
 
+from app.routers.auth import get_current_user
+
 router = APIRouter(prefix="/api/prompt-to-image", tags=["Prompt to Image"])
 
 @router.post("")
 async def generate_from_prompt(
-    request: Request,
     prompt: str = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user)
 ):
-    # --- Authentication & Credit Check ---
-    email = request.cookies.get("session_user")
-    if not email:
-        raise HTTPException(status_code=401, detail="Please login to use this service.")
-    
-    user = db.query(DBUser).filter(DBUser.email == email).first()
     if not user:
-        raise HTTPException(status_code=401, detail="User not found.")
+        raise HTTPException(status_code=401, detail="Please login to use this service.")
     
     CREDIT_COST = 10
     if user.credits < CREDIT_COST:
         raise HTTPException(status_code=402, detail=f"Insufficient credits. This service costs {CREDIT_COST} credits.")
-    # ------------------------------------
 
     if not prompt.strip():
         raise HTTPException(status_code=400, detail="Prompt cannot be empty.")

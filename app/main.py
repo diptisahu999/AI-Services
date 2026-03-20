@@ -5,6 +5,7 @@ from app.routers.web import router as web_router
 from app.routers.image_cleaner import router as image_cleaner_router
 from app.routers.image_to_art import router as image_to_art_router
 from app.routers.prompt_to_image import router as prompt_to_image_router
+from app.routers.image_inpainting import router as image_inpainting_router
 from app.routers.auth import router as auth_router
 from app.database import engine, Base
 from app import models
@@ -29,4 +30,5 @@ app.include_router(web_router)
 app.include_router(image_cleaner_router)
 app.include_router(image_to_art_router)
 app.include_router(prompt_to_image_router)
+app.include_router(image_inpainting_router)
 app.include_router(auth_router)
