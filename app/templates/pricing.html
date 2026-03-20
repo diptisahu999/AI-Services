@@ -433,6 +433,101 @@
 
     <script src="/static/js/index.js"></script>
 
+    <!-- Razorpay Checkout Modal -->
+    <div class="modal-overlay" id="razorpay-checkout"
+        style="z-index: 3000; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);">
+        <div class="modal-content"
+            style="background: white; color: black; padding: 0; width: 100%; max-width: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.6); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="background: #3359e0; color: white; padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div
+                            style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 1px solid rgba(255,255,255,0.3);">
+                            V</div>
+                        <span style="font-weight: 700; font-size: 18px;">Visora AI</span>
+                    </div>
+                    <button onclick="closeCheckout()"
+                        style="background: none; border: none; color: white; opacity: 0.8; font-size: 20px; cursor: pointer;">&times;</button>
+                </div>
+                <div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-bottom: 4px;">Total Amount</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="font-size: 28px; font-weight: 700;" id="checkout-amount">₹ 7,999</div>
+                        <div style="font-size: 10px; opacity: 0.8; display: flex; align-items: center; gap: 4px;">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C9.24 2 7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2h-1V7c0-2.76-2.24-5-5-5zm-2 5c0-1.1.9-2 2-2s2 .9 2 2v3h-4V7z" />
+                            </svg>
+                            Secured by Razorpay
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 24px; background: #fff;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+                    <div
+                        style="width: 24px; height: 24px; background: #f0f4ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3359e0;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <span style="font-size: 14px; font-weight: 700; color: #444;">Contact Details</span>
+                </div>
+
+                <div style="border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; margin-bottom: 16px;">
+                    <div style="display: flex; border-bottom: 1px solid #e0e0e0;">
+                        <div
+                            style="padding: 12px; background: #fafafa; border-right: 1px solid #e0e0e0; min-width: 80px; font-size: 14px; color: #666; display: flex; align-items: center; justify-content: space-between;">
+                            +91 <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </div>
+                        <input type="text" placeholder="Phone Number" value="+91 9876543210"
+                            style="flex: 1; border: none; padding: 12px; font-size: 14px; outline: none;">
+                    </div>
+                    <div style="padding: 12px; position: relative;">
+                        <span
+                            style="position: absolute; top: 4px; left: 12px; font-size: 10px; color: #3359e0; font-weight: 600;">Email</span>
+                        <input type="email" value="{{ user.email if user else 'user@example.com' }}"
+                            placeholder="Email Address"
+                            style="width: 100%; border: none; padding-top: 10px; font-size: 14px; outline: none; color: #333;">
+                    </div>
+                </div>
+
+                <button
+                    style="width: 100%; height: 48px; background: #3359e0; color: white; border: none; border-radius: 4px; font-weight: 700; font-size: 16px; margin-top: 80px; cursor: pointer;">
+                    Proceed
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="payment-modal"
+        style="z-index: 2000; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);">
+        <div class="modal-content"
+            style="background: white; color: black; padding: 0; width: 100%; max-width: 480px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; padding: 24px 32px; border-bottom: 1px solid #eee;">
+                <h3 style="font-size: 18px; font-weight: 700; margin: 0; color: #111;" id="payment-title">Payment Method
+                </h3>
+                <button onclick="closePaymentModal()"
+                    style="background: none; border: none; font-size: 24px; color: #999; cursor: pointer; padding: 0; line-height: 1;">&times;</button>
+            </div>
+
+            <div style="padding: 32px;">
+                <button onclick="handleRazorpay()"
+                    style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; height: 64px; border: 1px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <img src="https://razorpay.com/favicon.png" style="width: 24px; height: 24px;" alt="Razorpay">
+                    <span style="font-weight: 800; font-size: 18px; color: #111; font-style: italic;">Razorpay</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Global Modal -->
     <div class="modal-overlay" id="global-modal">
         <div class="modal-content">
@@ -442,6 +537,47 @@
             <button class="btn-modal" onclick="closeModal()">Got it</button>
         </div>
     </div>
+
+    <script>
+        let selectedPlanAmount = "₹ 0";
+
+        function openPaymentModal(planName, amount) {
+            selectedPlanAmount = amount;
+            document.getElementById('payment-title').textContent = `Payment Method (${planName})`;
+            document.getElementById('payment-modal').classList.add('is-active');
+        }
+
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.remove('is-active');
+        }
+
+        function handleRazorpay() {
+            closePaymentModal();
+            document.getElementById('checkout-amount').textContent = selectedPlanAmount;
+            document.getElementById('razorpay-checkout').classList.add('is-active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('razorpay-checkout').classList.remove('is-active');
+        }
+
+        document.querySelectorAll('.btn-subscribe').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.price-card');
+                const plan = card.querySelector('h3').textContent;
+                const amountText = card.querySelector('.price .amount').textContent;
+                // For yearly plans, let's use the final yearly amount in the checkout
+                const yearlyAmount = card.querySelector('.final').textContent.split('/')[0];
+                openPaymentModal(plan, yearlyAmount);
+            });
+        });
+
+        [document.getElementById('payment-modal'), document.getElementById('razorpay-checkout')].forEach(m => {
+            m.addEventListener('click', (e) => {
+                if (e.target === m) m.classList.remove('is-active');
+            });
+        });
+    </script>
 </body>
 
 </html>
