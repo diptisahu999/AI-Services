@@ -48,6 +48,138 @@
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
         }
+
+        /* ── Prompt Inspirations ── */
+        .inspirations-section {
+            margin-top: 28px;
+        }
+
+        .inspirations-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .inspirations-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .inspirations-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .inspirations-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .inspiration-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1.5px solid rgba(255, 255, 255, 0.07);
+            aspect-ratio: 4/3;
+            transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .inspiration-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 12px 40px rgba(108, 71, 255, 0.35);
+        }
+
+        .inspiration-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .inspiration-card:hover img {
+            transform: scale(1.06);
+        }
+
+        .inspiration-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.1) 55%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px 12px 12px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .inspiration-card:hover .inspiration-overlay {
+            opacity: 1;
+        }
+
+        .inspiration-prompt-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: #fff;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .inspiration-use-btn {
+            margin-top: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .inspiration-use-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Active card flash */
+        .inspiration-card.used {
+            border-color: #6c47ff;
+            box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.4);
+            animation: flashCard 0.5s ease;
+        }
+
+        @keyframes flashCard {
+            0% {
+                box-shadow: 0 0 0 0px rgba(108, 71, 255, 0.8);
+            }
+
+            60% {
+                box-shadow: 0 0 0 8px rgba(108, 71, 255, 0.25);
+            }
+
+            100% {
+                box-shadow: 0 0 0 3px rgba(108, 71, 255, 0.4);
+            }
+        }
     </style>
 </head>
 
@@ -234,6 +366,86 @@
                                         placeholder="A futuristic city with floating neon structures and crystal-clear waterfalls..."></textarea>
                                 </div>
 
+                                <!-- Prompt Inspirations -->
+                                <div class="inspirations-section">
+                                    <div class="inspirations-label">✨ Try a prompt</div>
+                                    <div class="inspirations-grid">
+
+                                        <!-- Card 1: Woman in park -->
+                                        <div class="inspiration-card"
+                                            onclick="usePrompt(this, 'A beautiful woman sitting gracefully in a lush green park, golden afternoon sunlight filtering through trees, photorealistic, cinematic, warm tones')">
+                                            <img src="/static/images/woman_in_park.png" alt="Woman sitting in park"
+                                                loading="lazy" />
+                                            <div class="inspiration-overlay">
+                                                <div class="inspiration-prompt-text">A beautiful woman sitting
+                                                    gracefully in a lush green park, golden afternoon sunlight...</div>
+                                                <div class="inspiration-use-btn">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.5">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                    Use this prompt
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 2: Futuristic City -->
+                                        <div class="inspiration-card"
+                                            onclick="usePrompt(this, 'Futuristic cyberpunk city at night with neon lights, flying cars, rain-soaked streets, ultra detailed, cinematic, 8k')">
+                                            <img src="/static/images/futuristic_city.png"
+                                                alt="Futuristic cyberpunk city" loading="lazy" />
+                                            <div class="inspiration-overlay">
+                                                <div class="inspiration-prompt-text">Futuristic cyberpunk city at night
+                                                    with neon lights, flying cars, rain-soaked streets...</div>
+                                                <div class="inspiration-use-btn">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.5">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                    Use this prompt
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 3: Enchanted Forest -->
+                                        <div class="inspiration-card"
+                                            onclick="usePrompt(this, 'Magical enchanted forest with glowing mushrooms, fireflies, misty atmosphere, fantasy art, ethereal lighting, ultra detailed')">
+                                            <img src="/static/images/enchanted_forest.png" alt="Enchanted forest"
+                                                loading="lazy" />
+                                            <div class="inspiration-overlay">
+                                                <div class="inspiration-prompt-text">Magical enchanted forest with
+                                                    glowing mushrooms, fireflies, misty atmosphere, fantasy art...</div>
+                                                <div class="inspiration-use-btn">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.5">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                    Use this prompt
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Card 4: Ocean Sunset -->
+                                        <div class="inspiration-card"
+                                            onclick="usePrompt(this, 'Breathtaking ocean sunset with dramatic clouds, golden hour light reflecting on water, photorealistic, cinematic wide angle')">
+                                            <img src="/static/images/ocean_sunset.png" alt="Ocean sunset"
+                                                loading="lazy" />
+                                            <div class="inspiration-overlay">
+                                                <div class="inspiration-prompt-text">Breathtaking ocean sunset with
+                                                    dramatic clouds, golden hour light reflecting on water...</div>
+                                                <div class="inspiration-use-btn">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2.5">
+                                                        <polyline points="9 18 15 12 9 6" />
+                                                    </svg>
+                                                    Use this prompt
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                                 <div class="actions">
                                     <button class="btn--primary" id="txt2img-btn" type="button" style="flex: 2;">
                                         Generate Image
@@ -376,6 +588,32 @@
     </div>
 
     <script src="/static/js/index.js"></script>
+    <script>
+        function usePrompt(card, prompt) {
+            const textarea = document.getElementById('txt2img-prompt');
+            if (!textarea) return;
+
+            // Animate textarea
+            textarea.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+            textarea.value = prompt;
+            textarea.style.borderColor = 'var(--accent)';
+            textarea.style.boxShadow = '0 0 0 4px rgba(108, 71, 255, 0.3)';
+
+            // Flash card
+            card.classList.add('used');
+            setTimeout(() => card.classList.remove('used'), 800);
+
+            // Reset textarea style
+            setTimeout(() => {
+                textarea.style.borderColor = '';
+                textarea.style.boxShadow = '';
+            }, 1200);
+
+            // Scroll to textarea
+            textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            textarea.focus();
+        }
+    </script>
 
     <!-- Global Modal -->
     <div class="modal-overlay" id="global-modal">
