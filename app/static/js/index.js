@@ -334,10 +334,129 @@
     }
   }
 
+  class TextToImageUI {
+    constructor(prefix, endpoint) {
+      this.prefix = prefix;
+      this.endpoint = endpoint;
+
+      // Elements
+      this.promptInput = document.getElementById(`${prefix}-prompt`);
+      this.actionBtn = document.getElementById(`${prefix}-btn`);
+      this.resetBtn = document.getElementById(`${prefix}-resetBtn`);
+      this.statusPill = document.getElementById(`${prefix}-statusPill`);
+
+      this.outputImg = document.getElementById(`${prefix}-outputImg`);
+      this.outputEmpty = document.getElementById(`${prefix}-outputEmpty`);
+      this.loader = document.getElementById(`${prefix}-loader`);
+      this.downloadBtn = document.getElementById(`${prefix}-downloadBtn`);
+      this.outputMeta = document.getElementById(`${prefix}-outputMeta`);
+      this.outputBox = document.getElementById(`${prefix}-outputBox`);
+
+      if (!this.promptInput || !this.actionBtn) {
+        return;
+      }
+
+      this.init();
+      console.log(`[TextToImageUI] Initialized ${prefix} service`);
+    }
+
+    init() {
+      if (this.resetBtn) {
+        this.resetBtn.addEventListener("click", () => this.resetAll());
+      }
+
+      if (this.actionBtn) {
+        this.actionBtn.addEventListener("click", () => this.process());
+      }
+
+      this.setStatus("Idle");
+    }
+
+    async process() {
+      const prompt = this.promptInput.value.trim();
+      if (!prompt) {
+        showModal("Empty Prompt", "Please enter a description for the image you want to generate.", "📝");
+        return;
+      }
+
+      this.setStatus("Generating…");
+      this.loader.style.display = "flex";
+      if (this.outputBox) this.outputBox.classList.add("preview__box--scanning");
+      this.actionBtn.disabled = true;
+      if (this.resetBtn) this.resetBtn.disabled = true;
+
+      try {
+        const formData = new FormData();
+        formData.append("prompt", prompt);
+
+        const response = await fetch(this.endpoint, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          let message = "Generation failed.";
+          try {
+            const data = await response.json();
+            if (data?.detail) message = data.detail;
+          } catch (_) { }
+
+          if (response.status === 402) {
+            this.setStatus("Credit limit reached");
+            showModal("Insufficient Credits", message, "⚡", "/pricing");
+            return;
+          }
+
+          throw new Error(message);
+        }
+
+        const blob = await response.blob();
+        const resultUrl = URL.createObjectURL(blob);
+
+        this.outputImg.src = resultUrl;
+        this.outputImg.style.display = "block";
+        this.outputEmpty.style.display = "none";
+
+        this.downloadBtn.href = resultUrl;
+        this.downloadBtn.download = `generated-${Date.now()}.png`;
+        this.downloadBtn.style.display = "inline-flex";
+
+        this.outputMeta.textContent = "1024x1024 • FLUX.1";
+
+        this.setStatus("Done");
+      } catch (err) {
+        console.error(`[TextToImageUI] Error in ${this.prefix} process:`, err);
+        this.setStatus("Failed");
+        showModal("Generation Error", err.message || "Something went wrong.", "⚠️");
+      } finally {
+        this.loader.style.display = "none";
+        if (this.outputBox) this.outputBox.classList.remove("preview__box--scanning");
+        this.actionBtn.disabled = false;
+        if (this.resetBtn) this.resetBtn.disabled = false;
+      }
+    }
+
+    resetAll() {
+      this.promptInput.value = "";
+      this.outputImg.src = "";
+      this.outputImg.style.display = "none";
+      this.outputEmpty.style.display = "block";
+      this.downloadBtn.href = "#";
+      this.downloadBtn.style.display = "none";
+      this.outputMeta.textContent = "—";
+      this.setStatus("Idle");
+    }
+
+    setStatus(text) {
+      if (this.statusPill) this.statusPill.textContent = text;
+    }
+  }
+
   // Initialize Services - Wrapped in DOMContentLoaded to be safe
   document.addEventListener('DOMContentLoaded', () => {
     new ServiceUI('cleaner', '/api/image-cleaner/clean');
     new ServiceUI('art', '/api/image-to-art');
+    new TextToImageUI('txt2img', '/api/prompt-to-image');
     new BackgroundMotion();
 
     // Profile dropdown toggle

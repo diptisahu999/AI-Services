@@ -34,6 +34,13 @@ async def art_page(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse(url="/login", status_code=302)
     return templates.TemplateResponse('art.html', {'request': request, 'user': user})
 
+@router.get('/text-to-image', response_class=HTMLResponse)
+async def text_to_image_page(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    if not user:
+        return RedirectResponse(url="/login", status_code=302)
+    return templates.TemplateResponse('text_to_image.html', {'request': request, 'user': user})
+
 @router.get('/pricing', response_class=HTMLResponse)
 async def pricing_page(request: Request, db: Session = Depends(get_db)):
     user = get_current_user(request, db)

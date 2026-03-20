@@ -27,6 +27,10 @@ build/
 dist/
 *.egg-info/
 
+outputs/
+tmp/
+
+
 app/gfpgan/weights/detection_Resnet50_Final.pth
 app/gfpgan/weights/weights/parsing_parsenet.pth
 app/services/image_enhancement/RealESRGAN_x2plus.pth

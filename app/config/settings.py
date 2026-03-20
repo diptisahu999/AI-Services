@@ -16,3 +16,6 @@ OUTPUT_DIR = Path(os.getenv('OUTPUT_DIR', str(TEMP_DIR / 'outputs')))
 # Optional model paths. If these are not provided, the service falls back to the original absolute paths in 1.py.
 GFPGAN_MODEL_PATH = os.getenv('GFPGAN_MODEL_PATH', '')
 REALESRGAN_MODEL_PATH = os.getenv('REALESRGAN_MODEL_PATH', '')
+
+# Hugging Face API Key
+HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY')
