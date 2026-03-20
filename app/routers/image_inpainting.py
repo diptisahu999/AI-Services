@@ -37,30 +37,39 @@ async def inpaint_image(
         # Ensure temp dir exists
         settings.TEMP_DIR.mkdir(parents=True, exist_ok=True)
         
-        with open(input_path, "wb") as f:
-            f.write(await file.read())
-            
-        with open(mask_path, "wb") as f:
-            f.write(await mask_file.read())
-
-        # Call the local lama-cleaner server (running on port 9080 as per lama_clener.py)
-        # The lama-cleaner API expects 'image' and 'mask' multipart files + ALL camelCase form fields
+        # Process and potentially resize images if they are too large
         try:
-            with open(input_path, 'rb') as img_f, open(mask_path, 'rb') as mask_f:
-                lama_files = {
-                    'image': (file.filename, img_f.read(), 'image/png'),
-                    'mask': ('mask.png', mask_f.read(), 'image/png')
-                }
+            input_content = await file.read()
+            mask_content = await mask_file.read()
+            
+            img = Image.open(io.BytesIO(input_content))
+            mask = Image.open(io.BytesIO(mask_content))
+            
+            # Use 2048 as maximum dimension for inpainting to prevent timeouts
+            MAX_DIM = 2048
+            if max(img.width, img.height) > MAX_DIM:
+                ratio = MAX_DIM / max(img.width, img.height)
+                new_size = (int(img.width * ratio), int(img.height * ratio))
+                img = img.resize(new_size, Image.LANCZOS)
+                mask = mask.resize(new_size, Image.NEAREST)
+                
+            img.save(input_path)   
+            mask.save(mask_path)
+            
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Invalid image or mask file: {str(e)}")
 
+        # Call the local lama-cleaner server
+        try:
             # ALL required form fields for lama-cleaner (camelCase as per server.py)
             lama_data = {
                 'ldmSteps': '20',
                 'ldmSampler': 'ddim',
-                'hdStrategy': 'Original',
+                'hdStrategy': 'Resize',
                 'zitsWireframe': 'true',
                 'hdStrategyCropMargin': '128',
                 'hdStrategyCropTrigerSize': '512',
-                'hdStrategyResizeLimit': '1280',
+                'hdStrategyResizeLimit': '2048',
                 'prompt': '',
                 'negativePrompt': '',
                 'useCroper': 'false',
@@ -90,13 +99,18 @@ async def inpaint_image(
                 'controlnet_method': 'control_v11p_sd15_canny',
             }
 
-            lama_response = requests.post(
-                "http://127.0.0.1:9080/inpaint",
-                files={'image': (file.filename, open(input_path, 'rb'), 'image/png'),
-                       'mask': ('mask.png', open(mask_path, 'rb'), 'image/png')},
-                data=lama_data,
-                timeout=60
-            )
+            with open(input_path, 'rb') as img_f, open(mask_path, 'rb') as mask_f:
+                lama_files = {
+                    'image': (file.filename, img_f, 'image/png'),
+                    'mask': ('mask.png', mask_f, 'image/png')
+                }
+
+                lama_response = requests.post(
+                    "http://127.0.0.1:9080/inpaint",
+                    files=lama_files,
+                    data=lama_data,
+                    timeout=600
+                )
 
             if lama_response.status_code != 200:
                 raise HTTPException(status_code=500, detail=f"LaMa Engine Error: {lama_response.text}")
@@ -108,8 +122,14 @@ async def inpaint_image(
             with open(output_path, "wb") as out_f:
                 out_f.write(lama_response.content)
 
+        except requests.exceptions.ReadTimeout:
+            raise HTTPException(status_code=504, detail="AI Engine timed out processing the image. Try with a smaller image or wait for the system to be less busy.")
         except requests.exceptions.ConnectionError:
             raise HTTPException(status_code=503, detail="AI Engine is not running. Please start lama_clener.py on port 9080.")
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Inpainting processing error: {str(e)}")
 
         # Deduct credits
         db = SessionLocal()
