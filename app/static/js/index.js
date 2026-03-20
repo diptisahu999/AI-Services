@@ -376,6 +376,74 @@
         window.location.href = btn.href;
       });
     });
+
+    // Demo Slider Logic
+    const demoWrappers = document.querySelectorAll('.demo-slider-wrapper');
+    demoWrappers.forEach(wrapper => {
+      const afterImage = wrapper.querySelector('.demo-image-after');
+      const handle = wrapper.querySelector('.demo-slider-handle');
+
+      let isSliding = false;
+      let isHovering = false;
+      let autoPosition = 50;
+      let autoDirection = 0.15; // Speed and direction
+
+      const updateSlider = (percent) => {
+        afterImage.style.width = `${percent}%`;
+        handle.style.left = `${percent}%`;
+      };
+
+      const slide = (e) => {
+        if (!isSliding) return;
+        let x = e.clientX;
+        if (e.touches && e.touches.length > 0) {
+          x = e.touches[0].clientX;
+        }
+
+        let rect = wrapper.getBoundingClientRect();
+        let position = ((x - rect.left) / rect.width) * 100;
+        if (position < 0) position = 0;
+        if (position > 100) position = 100;
+
+        autoPosition = position; // Sync auto position
+        updateSlider(position);
+      };
+
+      wrapper.addEventListener('mousedown', () => isSliding = true);
+      wrapper.addEventListener('mouseup', () => isSliding = false);
+      wrapper.addEventListener('mouseleave', () => {
+        isSliding = false;
+        isHovering = false;
+      });
+      wrapper.addEventListener('mouseenter', () => isHovering = true);
+      wrapper.addEventListener('mousemove', (e) => {
+        if (isSliding) slide(e);
+      });
+
+      wrapper.addEventListener('touchstart', () => {
+        isSliding = true;
+        isHovering = true;
+      });
+      wrapper.addEventListener('touchend', () => {
+        isSliding = false;
+        isHovering = false;
+      });
+      wrapper.addEventListener('touchmove', (e) => {
+        if (isSliding) slide(e);
+      }, { passive: true });
+
+      // Auto Animation Loop
+      function autoAnimate() {
+        if (!isSliding && !isHovering) {
+          autoPosition += autoDirection;
+          if (autoPosition >= 80) autoDirection = -0.15;
+          if (autoPosition <= 20) autoDirection = 0.15;
+          updateSlider(autoPosition);
+        }
+        requestAnimationFrame(autoAnimate);
+      }
+      autoAnimate();
+    });
   });
 
   // Global functions to show/hide modal
