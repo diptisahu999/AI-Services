@@ -299,66 +299,187 @@
         <h2 class="section-title">See The Magic Happen</h2>
         <p class="section-subtitle">Slide to see the incredible difference our AI enhancement makes.</p>
 
-        <div class="demo-sliders-container"
-          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; width: 100%; max-width: 1200px; margin: 0 auto;">
-          <div class="demo-col">
-            <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image Upscaler</h3>
-            <div class="demo-slider-wrapper" style="max-width: 100%;">
-              <div class="demo-image demo-image-before"
-                style="background-image: url('/static/images/Screenshot%202026-03-20%20103824.png');">
-                <span class="demo-label demo-label-before">Before</span>
-              </div>
-              <div class="demo-image demo-image-after"
-                style="background-image: url('/static/images/Screenshot%202026-03-20%20103850.png');">
-                <span class="demo-label demo-label-after">After</span>
-              </div>
-              <div class="demo-slider-handle">
-                <div class="demo-slider-button">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" transform="translate(6, 0) scale(-1, 1)" />
-                  </svg>
+        <div class="demo-carousel-viewport"
+          style="width: 100%; max-width: 1200px; margin: 40px auto; overflow: hidden; position: relative; padding: 20px 0;">
+          <div class="demo-carousel-track" id="demo-track"
+            style="display: flex; gap: 40px; transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); cursor: grab;">
+
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image Upscaler
+              </h3>
+              <div class="demo-slider-wrapper" style="max-width: 350px;">
+                <div class="demo-image demo-image-before"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20103824.png');">
+                  <span class="demo-label demo-label-before">Before</span>
+                </div>
+                <div class="demo-image demo-image-after"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20103850.png');">
+                  <span class="demo-label demo-label-after">After</span>
+                </div>
+                <div class="demo-slider-handle">
+                  <div class="demo-slider-button">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" transform="translate(6, 0) scale(-1, 1)" />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="demo-col">
-            <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image To Art</h3>
-            <div class="demo-slider-wrapper" style="max-width: 100%;">
-              <div class="demo-image demo-image-before"
-                style="background-image: url('/static/images/Screenshot%202026-03-20%20111005.png');">
-                <span class="demo-label demo-label-before">Original</span>
-              </div>
-              <div class="demo-image demo-image-after"
-                style="background-image: url('/static/images/Screenshot%202026-03-20%20111059.png');">
-                <span class="demo-label demo-label-after">Art</span>
-              </div>
-              <div class="demo-slider-handle">
-                <div class="demo-slider-button">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                      stroke-linejoin="round" transform="translate(6, 0) scale(-1, 1)" />
-                  </svg>
+
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image To Art</h3>
+              <div class="demo-slider-wrapper" style="max-width: 350px;">
+                <div class="demo-image demo-image-before"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20111005.png');">
+                  <span class="demo-label demo-label-before">Original</span>
+                </div>
+                <div class="demo-image demo-image-after"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20111059.png');">
+                  <span class="demo-label demo-label-after">Art</span>
+                </div>
+                <div class="demo-slider-handle">
+                  <div class="demo-slider-button">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" transform="translate(6, 0) scale(-1, 1)" />
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="demo-col">
-            <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Object Remover</h3>
-            <div class="demo-video-wrapper"
-              style="width: 100%; max-width: 350px; height: 350px; margin: 0 auto; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);">
-              <video src="/static/images/demo_small.mp4" autoplay loop muted playsinline
-                style="width: 100%; height: 100%; object-fit: cover;"></video>
-              <div
-                style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 4px 10px; border-radius: 20px; font-size: 10px; color: white; border: 1px solid rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 0.05em;">
-                LIVE PREVIEW</div>
+
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Object Remover
+              </h3>
+              <div class="demo-video-wrapper"
+                style="width: 100%; max-width: 350px; height: 350px; margin: 0 auto; border-radius: 20px; overflow: hidden; position: relative; border: 1px solid rgba(255, 255, 255, 0.1); background: #000; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);">
+                <video src="/static/images/demo_small.mp4" autoplay loop muted playsinline
+                  style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <div
+                  style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); padding: 4px 10px; border-radius: 20px; font-size: 10px; color: white; border: 1px solid rgba(255,255,255,0.2); font-weight: 800; letter-spacing: 0.05em;">
+                  LIVE PREVIEW</div>
+              </div>
             </div>
+
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Night Scene</h3>
+              <div class="demo-slider-wrapper" style="max-width: 350px;">
+                <div class="demo-image demo-image-before"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20135726.png');">
+                  <span class="demo-label demo-label-before">AI Night</span>
+                </div>
+                <div class="demo-image demo-image-after"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20135746.png');">
+                  <span class="demo-label demo-label-after">Original</span>
+                </div>
+                <div class="demo-slider-handle">
+                  <div class="demo-slider-button">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" transform="translate(6, 0) scale(-1, 1)" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Text To Image</h3>
+              <div class="demo-slider-wrapper" style="max-width: 350px; cursor: default;">
+                <div class="demo-image"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20140924.png'); width: 100%; height: 100%;">
+                  <div
+                    style="position: absolute; bottom: 20px; left: 20px; right: 20px; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div
+                      style="font-size: 10px; color: var(--accent2); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">
+                      Prompt used</div>
+                    <div style="font-size: 12px; color: white; line-height: 1.4; font-weight: 500; font-style: italic;">
+                      "A cinematic photorealistic portrait of an ancient warrior, volcanic ember lighting..."</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Clones for circular effect -->
+            <div class="demo-col clone" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image Upscaler
+              </h3>
+              <div class="demo-slider-wrapper" style="max-width: 350px;">
+                <div class="demo-image demo-image-before"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20103824.png');"></div>
+                <div class="demo-image demo-image-after"
+                  style="background-image: url('/static/images/Screenshot%202026-03-20%20103850.png');"></div>
+              </div>
+            </div>
+
           </div>
+
+          <!-- Navigation arrows -->
+          <button id="demo-prev"
+            style="position: absolute; left: 10px; top: 55%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; color: white; cursor: pointer; z-index: 10; font-size: 20px;">&larr;</button>
+          <button id="demo-next"
+            style="position: absolute; right: 10px; top: 55%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; color: white; cursor: pointer; z-index: 10; font-size: 20px;">&rarr;</button>
         </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            const track = document.getElementById('demo-track');
+            const items = track.children;
+            const next = document.getElementById('demo-next');
+            const prev = document.getElementById('demo-prev');
+            let index = 0;
+            const itemCount = 5; // Updated to 5 items
+            const gap = 40;
+
+            function updateCarousel() {
+              const itemWidth = items[0].offsetWidth + gap;
+              track.style.transform = `translateX(-${index * itemWidth}px)`;
+
+              if (index >= itemCount) {
+                setTimeout(() => {
+                  track.style.transition = 'none';
+                  index = 0;
+                  track.style.transform = `translateX(0)`;
+                  setTimeout(() => {
+                    track.style.transition = 'transform 0.8s cubic-bezier(0.65, 0, 0.35, 1)';
+                  }, 50);
+                }, 800);
+              }
+            }
+
+            next.addEventListener('click', () => {
+              index++;
+              updateCarousel();
+            });
+
+            prev.addEventListener('click', () => {
+              if (index <= 0) index = itemCount;
+              index--;
+              updateCarousel();
+            });
+
+            // Auto rotation every 4 seconds
+            let autoRotate = setInterval(() => {
+              index++;
+              updateCarousel();
+            }, 4000);
+
+            track.addEventListener('mouseenter', () => clearInterval(autoRotate));
+            track.addEventListener('mouseleave', () => {
+              autoRotate = setInterval(() => {
+                index++;
+                updateCarousel();
+              }, 4000);
+            });
+          });
+        </script>
       </div>
     </section>
 
