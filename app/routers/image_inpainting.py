@@ -119,11 +119,14 @@ async def inpaint_image(
         db.refresh(user)
         db.close()
 
-        return {
-            "success": True, 
-            "output_url": f"/static/temp/outputs/{output_filename}",
-            "credits_remaining": user.credits
-        }
+        return JSONResponse(
+            content={
+                "success": True, 
+                "output_url": f"/static/temp/outputs/{output_filename}",
+                "credits_remaining": user.credits
+            },
+            headers={"X-Credits-Left": str(user.credits)}
+        )
 
     except Exception as e:
         import traceback

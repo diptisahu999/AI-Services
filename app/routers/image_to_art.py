@@ -68,7 +68,11 @@ async def convert_to_art(
         user.credits -= CREDIT_COST
         db.commit()
 
-        return Response(content=output_bytes, media_type=media_type)
+        return Response(
+            content=output_bytes, 
+            media_type=media_type,
+            headers={"X-Credits-Left": str(user.credits)}
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Image to art conversion failed: {str(e)}")

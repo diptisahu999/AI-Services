@@ -32,4 +32,4 @@ async def clean_image_endpoint(
     user.credits -= CREDIT_COST
     db.commit()
 
-    return Response(content=content, media_type=media_type)
+    return Response(content=content, media_type=media_type, headers={"X-Credits-Left": str(user.credits)})

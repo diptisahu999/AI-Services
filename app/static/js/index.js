@@ -193,6 +193,10 @@
         if (this.strengthInput) meta = `strength ${this.strengthInput.value}% • ${meta}`;
         this.outputMeta.textContent = meta;
 
+        // NEW: Update credits from header
+        const updatedCredits = response.headers.get("X-Credits-Left");
+        if (updatedCredits) updateGlobalCredits(updatedCredits);
+
         this.setStatus("Done");
       } catch (err) {
         console.error(`[ServiceUI] Error in ${this.prefix} process:`, err);
@@ -417,6 +421,10 @@
         const response = await fetch(this.endpoint, { method: "POST", body: formData });
         if (!response.ok) throw new Error("Processing failed");
 
+        // NEW: Update credits from header
+        const updatedCredits = response.headers.get("X-Credits-Left");
+        if (updatedCredits) updateGlobalCredits(updatedCredits);
+
         const data = await response.json();
         this.outputImg.src = data.output_url;
         this.outputImg.style.display = "block";
@@ -610,6 +618,10 @@
 
         this.outputMeta.textContent = "1024x1024 • FLUX.1";
 
+        // NEW: Update credits from header
+        const updatedCredits = response.headers.get("X-Credits-Left");
+        if (updatedCredits) updateGlobalCredits(updatedCredits);
+
         this.setStatus("Done");
       } catch (err) {
         console.error(`[TextToImageUI] Error in ${this.prefix} process:`, err);
@@ -775,6 +787,22 @@
       window.location.href = nextUrl;
       nextUrl = null;
     }
+  };
+
+  window.updateGlobalCredits = (newCount) => {
+    // 1. Header credits pill
+    const headerPill = document.querySelector('.header-credits-pill');
+    if (headerPill) {
+      headerPill.innerHTML = `<span class="icon">⚡</span> ${newCount}`;
+    }
+
+    // 2. Profile dropdown count
+    const creditsCount = document.querySelector('.credits-count');
+    if (creditsCount) {
+      creditsCount.textContent = newCount;
+    }
+
+    console.log(`[Credits] Updated to ${newCount}`);
   };
 
 })();
