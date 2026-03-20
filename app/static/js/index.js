@@ -447,6 +447,7 @@
 
   class BackgroundMotion {
     constructor() {
+      this.canvas = document.getElementById('bg-canvas');
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
       this.bubbles = [];
