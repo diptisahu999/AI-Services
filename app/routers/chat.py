@@ -11,6 +11,7 @@ router = APIRouter(prefix="/api/chat", tags=["Chat & Code Generation"])
 @router.post("/generate")
 async def generate_chat(
     prompt: str = Form(...),
+    model: str = Form("Groq Llama 3"),
     user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -40,7 +41,7 @@ async def generate_chat(
         user_id=user.id,
         message=prompt,
         response=response,
-        model_name="Groq Llama 3"
+        model_name=model
     )
     db.add(chat_entry)
 

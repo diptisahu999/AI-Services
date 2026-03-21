@@ -423,12 +423,19 @@
         .chat-box__footer {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 12px;
             border-top: 1px solid var(--border-dark);
             padding-top: 16px;
         }
 
         .footer-tools {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .footer-actions-right {
             display: flex;
             align-items: center;
             gap: 14px;
@@ -651,6 +658,67 @@
 
         .action-icon-btn.active svg {
             fill: currentColor;
+        }
+
+        /* Model Dropdown Styles */
+        .model-dropdown {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            right: 0;
+            background: #161b22;
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 180px;
+            z-index: 1000;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            animation: slideInUp 0.2s ease-out;
+        }
+
+        .model-dropdown.active {
+            display: block;
+        }
+
+        .model-option {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #8b949e;
+            font-size: 13.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .model-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .model-option.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .model-option .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Tooltip style */
@@ -1345,36 +1413,52 @@
                                 </div>
                             </div>
 
-                            <div class="model-selector">
-                                <span class="dot"
-                                    style="background: #f87171; box-shadow: 0 0 10px rgba(248, 113, 113, 0.5);"></span>
-                                Groq Llama 3
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
+                            <div class="footer-actions-right">
+                                <div class="model-selector-container"
+                                    style="position: relative; display: flex; align-items: center;">
+                                    <div class="model-selector" id="btn-model-selector" style="cursor: pointer;">
+                                        <span class="dot" id="active-model-dot"
+                                            style="background: #10a37f; box-shadow: 0 0 10px rgba(16, 163, 127, 0.5);"></span>
+                                        <span id="active-model-name">GPT-4o</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
 
-                            <div class="tool-icon-btn">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2">
-                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                                    <line x1="12" y1="19" x2="12" y2="23"></line>
-                                    <line x1="8" y1="23" x2="16" y2="23"></line>
-                                </svg>
-                            </div>
+                                    <div class="model-dropdown" id="model-dropdown">
+                                        <div class="model-option" data-model="Groq Llama 3" data-color="#f87171">
+                                            <span class="dot" style="background: #f87171;"></span> Groq Llama 3
+                                        </div>
+                                        <div class="model-option" data-model="Gemini Pro" data-color="#4285f4">
+                                            <span class="dot" style="background: #4285f4;"></span> Gemini Pro
+                                        </div>
+                                        <div class="model-option active" data-model="GPT-4o" data-color="#10a37f">
+                                            <span class="dot" style="background: #10a37f;"></span> GPT-4o
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="btn-send">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="3" transform="rotate(-45)">
-                                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                </svg>
+                                <div class="tool-icon-btn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                                    </svg>
+                                </div>
+
+                                <div class="btn-send">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="3" transform="rotate(-45)">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </main>
             <button id="btn-scroll-bottom" title="Scroll to bottom">
                 <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none">
@@ -1386,6 +1470,42 @@
 
     <script>
         // Simple auto-resize for textarea
+        // Model Selector Logic
+        const btnModelSelector = document.getElementById('btn-model-selector');
+        const modelDropdown = document.getElementById('model-dropdown');
+        const activeModelName = document.getElementById('active-model-name');
+        const activeModelDot = document.getElementById('active-model-dot');
+        const modelOptions = document.querySelectorAll('.model-option');
+
+        let currentModel = 'Groq Llama 3';
+
+        if (btnModelSelector) {
+            btnModelSelector.addEventListener('click', (e) => {
+                e.stopPropagation();
+                modelDropdown.classList.toggle('active');
+            });
+        }
+
+        modelOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                const model = opt.getAttribute('data-model');
+                const color = opt.getAttribute('data-color');
+
+                currentModel = model;
+                activeModelName.textContent = model;
+                activeModelDot.style.background = color;
+                activeModelDot.style.boxShadow = `0 0 10px ${color}80`;
+
+                modelOptions.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                modelDropdown.classList.remove('active');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            if (modelDropdown) modelDropdown.classList.remove('active');
+        });
+
         const textarea = document.querySelector('.chat-input');
         const fileInput = document.getElementById('chat-file-input');
         const btnAttach = document.getElementById('btn-attach');
@@ -1627,6 +1747,7 @@
             try {
                 const formData = new FormData();
                 formData.append('prompt', text);
+                formData.append('model', currentModel);
 
                 const response = await fetch('/api/chat/generate', {
                     method: 'POST',
@@ -1674,6 +1795,7 @@
             try {
                 const formData = new FormData();
                 formData.append('prompt', prompt);
+                formData.append('model', currentModel);
 
                 const response = await fetch('/api/chat/generate', {
                     method: 'POST',
