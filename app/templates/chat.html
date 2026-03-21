@@ -234,16 +234,92 @@
             cursor: pointer;
             font-size: 13.5px;
             color: #bdc3c7;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             transition: all 0.2s;
             margin-bottom: 4px;
+            position: relative;
         }
 
         .history-item:hover {
             color: #fff;
             background: rgba(255, 255, 255, 0.08);
+        }
+
+        .history-item__text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .history-item__actions-btn {
+            background: none;
+            border: none;
+            color: #8b949e;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.2s;
+        }
+
+        .history-item:hover .history-item__actions-btn {
+            opacity: 1;
+        }
+
+        .history-item__actions-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .history-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #161b22;
+            border: 1px solid var(--border-dark);
+            border-radius: 12px;
+            padding: 6px;
+            min-width: 140px;
+            z-index: 1000;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            animation: slideInUp 0.15s ease-out;
+        }
+
+        .history-dropdown.active {
+            display: block;
+        }
+
+        .history-dropdown-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #c9d1d9;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .history-dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .history-dropdown-item.delete {
+            color: #f85149;
+        }
+
+        .history-dropdown-item.delete:hover {
+            background: rgba(248, 81, 73, 0.1);
+            color: #ff6e6e;
         }
 
         /* Bottom Profile Styles */
@@ -1631,17 +1707,110 @@
                     data.forEach(chat => {
                         const item = document.createElement('div');
                         item.className = 'history-item';
-                        item.textContent = chat.message.substring(0, 30) + (chat.message.length > 30 ? '...' : '');
-                        item.title = chat.message;
-                        item.onclick = () => {
+                        item.setAttribute('data-id', chat.id);
+
+                        const titleText = chat.message.substring(0, 30) + (chat.message.length > 30 ? '...' : '');
+
+                        item.innerHTML = `
+                            <span class="history-item__text" title="${chat.message}">${titleText}</span>
+                            <button class="history-item__actions-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="1.5"></circle>
+                                    <circle cx="12" cy="5" r="1.5"></circle>
+                                    <circle cx="12" cy="19" r="1.5"></circle>
+                                </svg>
+                            </button>
+                            <div class="history-dropdown">
+                                <div class="history-dropdown-item share">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                                    Share
+                                </div>
+                                <div class="history-dropdown-item rename">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                    Rename
+                                </div>
+                                <div class="history-dropdown-item delete">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                    Delete
+                                </div>
+                            </div>
+                        `;
+
+                        item.onclick = (e) => {
+                            if (e.target.closest('.history-item__actions-btn') || e.target.closest('.history-dropdown')) {
+                                return;
+                            }
                             // Focus on this chat
                             chatHistory.innerHTML = '';
                             chatHistory.classList.add('active');
+                            chatHistory.setAttribute('data-active-id', chat.id);
                             if (greetingTitle) greetingTitle.style.display = 'none';
                             if (greetingSub) greetingSub.style.display = 'none';
+                            const controls = document.getElementById('chat-controls');
+                            if (controls) controls.style.display = 'flex';
+                            chatMain.style.justifyContent = 'flex-start';
+                            chatMain.style.paddingTop = '0px';
+                            document.querySelector('.pill-mode').style.display = 'none';
+
                             addMessage(chat.message, 'user');
                             addMessage(chat.response, 'ai', false, chat.feedback, chat.id);
+                            scrollToBottom();
                         };
+
+                        const actionsBtn = item.querySelector('.history-item__actions-btn');
+                        const dropdown = item.querySelector('.history-dropdown');
+
+                        actionsBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            // Close other dropdowns
+                            document.querySelectorAll('.history-dropdown').forEach(d => {
+                                if (d !== dropdown) d.classList.remove('active');
+                            });
+                            dropdown.classList.toggle('active');
+                        };
+
+                        // Action handlers
+                        item.querySelector('.history-dropdown-item.share').onclick = (e) => {
+                            e.stopPropagation();
+                            dropdown.classList.remove('active');
+                            alert('Share functionality coming soon!');
+                        };
+
+                        item.querySelector('.history-dropdown-item.rename').onclick = (e) => {
+                            e.stopPropagation();
+                            dropdown.classList.remove('active');
+                            const newName = prompt('Enter new name:', chat.message.substring(0, 30));
+                            if (newName) {
+                                alert('Rename functionality coming soon!');
+                            }
+                        };
+
+                        item.querySelector('.history-dropdown-item.delete').onclick = (e) => {
+                            e.stopPropagation();
+                            dropdown.classList.remove('active');
+
+                            showConfirmModal('Delete Chat History', 'Are you sure you want to permanently delete this chat history? This action cannot be undone.', async () => {
+                                try {
+                                    const response = await fetch(`/api/chat/${chat.id}`, {
+                                        method: 'DELETE'
+                                    });
+                                    const data = await response.json();
+                                    if (data.success) {
+                                        loadChatHistory();
+                                        const activeChatId = chatHistory.getAttribute('data-active-id');
+                                        if (activeChatId == chat.id) {
+                                            location.reload();
+                                        }
+                                    } else {
+                                        showModal('Error', data.detail || 'Failed to delete chat.', '❌');
+                                    }
+                                } catch (err) {
+                                    console.error("Delete failed", err);
+                                    showModal('Error', 'Could not delete chat. Please try again.', '❌');
+                                }
+                            });
+                        };
+
                         list.appendChild(item);
                     });
                 }
@@ -1661,7 +1830,14 @@
         });
 
         document.addEventListener('click', (e) => {
+            const sidebarProfileDropdown = document.getElementById('sidebar-profile-dropdown');
             if (profileDropdown) profileDropdown.classList.remove('active');
+            if (sidebarProfileDropdown) sidebarProfileDropdown.classList.remove('active');
+
+            // Close all history dropdowns if clicking outside
+            if (!e.target.closest('.history-item__actions-btn')) {
+                document.querySelectorAll('.history-dropdown').forEach(d => d.classList.remove('active'));
+            }
 
             // Copy logic
             const copyBtn = e.target.closest('[data-tooltip="Copy"]');
@@ -1888,9 +2064,53 @@
             <div class="modal-icon" id="modal-icon">⚡</div>
             <h3 class="modal-title" id="modal-title">Notification</h3>
             <p class="modal-message" id="modal-message">Message goes here...</p>
-            <button class="btn-modal" onclick="closeModal()">Got it</button>
+            <div class="modal-footer" id="modal-footer">
+                <button class="btn-modal" id="modal-btn-confirm" onclick="closeModal()">Got it</button>
+                <button class="btn-modal-secondary" id="modal-btn-cancel" onclick="closeModal()"
+                    style="display: none;">Cancel</button>
+            </div>
         </div>
     </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('global-modal').classList.remove('is-active');
+        }
+
+        function showModal(title, message, icon = '⚡') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('modal-btn-confirm').innerText = 'Got it';
+            document.getElementById('modal-btn-confirm').className = 'btn-modal';
+            document.getElementById('modal-btn-cancel').style.display = 'none';
+
+            document.getElementById('modal-btn-confirm').onclick = closeModal;
+            document.getElementById('global-modal').classList.add('is-active');
+        }
+
+        function showConfirmModal(title, message, onConfirm, icon = '🗑️') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerText = icon;
+
+            const confirmBtn = document.getElementById('modal-btn-confirm');
+            const cancelBtn = document.getElementById('modal-btn-cancel');
+
+            confirmBtn.innerText = 'Delete';
+            confirmBtn.className = 'btn-modal-danger';
+            cancelBtn.innerText = 'Cancel';
+            cancelBtn.style.display = 'block';
+
+            confirmBtn.onclick = () => {
+                onConfirm();
+                closeModal();
+            };
+            cancelBtn.onclick = closeModal;
+
+            document.getElementById('global-modal').classList.add('is-active');
+        }
+    </script>
     <div class="bg">
         <div class="bg__grid"></div>
         <div class="bg__orb bg__orb--1"></div>

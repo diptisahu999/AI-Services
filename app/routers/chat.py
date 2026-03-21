@@ -92,3 +92,20 @@ async def save_feedback(
     chat_entry.feedback = feedback if feedback != "None" else None
     db.commit()
     return {"success": True}
+
+@router.delete("/{chat_id}")
+async def delete_chat(
+    chat_id: int,
+    user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login.")
+    
+    chat_entry = db.query(ChatHistory).filter(ChatHistory.id == chat_id, ChatHistory.user_id == user.id).first()
+    if not chat_entry:
+        raise HTTPException(status_code=404, detail="Chat not found.")
+    
+    db.delete(chat_entry)
+    db.commit()
+    return {"success": True}
