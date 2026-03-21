@@ -451,7 +451,7 @@
       if (!this.canvas) return;
       this.ctx = this.canvas.getContext('2d');
       this.bubbles = [];
-      this.count = 45;
+      this.count = 60;
 
       window.addEventListener('resize', () => this.resize());
 
@@ -468,11 +468,12 @@
     init() {
       for (let i = 0; i < this.count; i++) {
         this.bubbles.push({
-          x: (Math.random() - 0.5) * 3000,
-          y: (Math.random() - 0.5) * 3000,
+          x: (Math.random() - 0.5) * 4000,
+          y: (Math.random() - 0.5) * 4000,
           z: Math.random() * 2000,
-          size: 15 + Math.random() * 30,
-          speed: 0.5 + Math.random() * 2.0
+          size: 10 + Math.random() * 40,
+          speed: 0.3 + Math.random() * 1.5,
+          opacity: 0.1 + Math.random() * 0.4
         });
       }
     }
@@ -483,19 +484,15 @@
       const centerX = this.canvas.width / 2;
       const centerY = this.canvas.height / 2;
 
-      // Sort bubbles by depth to draw furthest first
       this.bubbles.sort((a, b) => b.z - a.z);
 
       for (let i = 0; i < this.bubbles.length; i++) {
         const p = this.bubbles[i];
 
-        // Move float naturally upwards
         p.y -= p.speed;
-        if (p.y < -1500) p.y = 1500;
+        if (p.y < -2000) p.y = 2000;
 
-        // Perspective projection
-        // Offset z to be in front of camera
-        const zOffset = p.z + 1000;
+        const zOffset = p.z + 500;
         if (zOffset < 1) continue;
 
         const scale = 800 / zOffset;
@@ -503,26 +500,28 @@
         const py = p.y * scale + centerY;
         const ps = p.size * scale;
 
-        // Draw 3D Bubble
+        if (px + ps < 0 || px - ps > this.canvas.width || py + ps < 0 || py - ps > this.canvas.height) continue;
+
         this.ctx.beginPath();
         this.ctx.arc(px, py, ps, 0, Math.PI * 2);
 
-        // Radial gradient for 3D bubble effect
         const gradient = this.ctx.createRadialGradient(
           px - ps * 0.3, py - ps * 0.3, ps * 0.1,
           px, py, ps
         );
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${Math.min(1, scale * 0.7)})`);
-        gradient.addColorStop(0.3, `rgba(142, 117, 255, ${Math.min(1, scale * 0.4)})`);
-        gradient.addColorStop(0.8, `rgba(80, 50, 200, ${Math.min(1, scale * 0.1)})`);
-        gradient.addColorStop(1, `rgba(108, 71, 255, ${Math.min(1, scale * 0.5)})`);
+        
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${p.opacity + 0.2})`);
+        gradient.addColorStop(0.2, `rgba(167, 139, 250, ${p.opacity})`);
+        gradient.addColorStop(0.6, `rgba(124, 58, 237, ${p.opacity * 0.3})`);
+        gradient.addColorStop(1, `rgba(45, 20, 100, 0.05)`);
 
         this.ctx.fillStyle = gradient;
         this.ctx.fill();
 
-        // Bubble outline
-        this.ctx.lineWidth = Math.max(0.5, scale * 1.5);
-        this.ctx.strokeStyle = `rgba(255, 255, 255, ${Math.min(1, scale * 0.6)})`;
+        this.ctx.beginPath();
+        this.ctx.arc(px, py, ps, 0, Math.PI * 2);
+        this.ctx.lineWidth = Math.max(0.5, scale * 1.0);
+        this.ctx.strokeStyle = `rgba(255, 255, 255, ${p.opacity * 0.5})`;
         this.ctx.stroke();
       }
 
