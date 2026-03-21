@@ -264,7 +264,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-bottom: 100px;
+            overflow: hidden;
+            width: 100%;
+            height: 0;
+            /* Important: allows flex child to scroll */
         }
 
         .pill-mode {
@@ -299,8 +302,11 @@
         .chat-box-wrapper {
             width: 100%;
             max-width: 800px;
-            padding: 0 40px;
+            padding: 20px 40px;
             box-sizing: border-box;
+            background: var(--bg-dark);
+            z-index: 10;
+            flex-shrink: 0;
         }
 
         .chat-box {
@@ -433,6 +439,249 @@
         .icon-square:hover {
             border-color: #8b949e;
             color: #fff;
+        }
+
+        /* Chat History Styles */
+        .chat-history {
+            width: 100%;
+            max-width: 800px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 40px;
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-dark) transparent;
+            scroll-behavior: smooth;
+        }
+
+        .chat-history::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-history::-webkit-scrollbar-thumb {
+            background: var(--border-dark);
+            border-radius: 10px;
+        }
+
+        .chat-history.active {
+            display: flex;
+        }
+
+        .message {
+            display: flex;
+            gap: 16px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message__avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message--user .message__avatar {
+            background: #fff;
+            color: #000;
+        }
+
+        .message--ai .message__avatar {
+            background: #8e75ff;
+            color: #fff;
+        }
+
+        .message__content {
+            flex: 1;
+            line-height: 1.6;
+            font-size: 15px;
+            color: #e6edf3;
+            white-space: pre-wrap;
+        }
+
+        .message--ai {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-dark);
+            margin-bottom: 8px;
+        }
+
+        .message__actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-dark);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #8b949e;
+            transition: all 0.2s;
+        }
+
+        .action-icon-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #8b949e;
+        }
+
+        .action-icon-btn.active[data-tooltip="Good response"] {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.15);
+            border-color: #4ade80;
+        }
+
+        .action-icon-btn.active[data-tooltip="Bad response"] {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.15);
+            border-color: #f87171;
+        }
+
+        .action-icon-btn.active svg {
+            fill: currentColor;
+        }
+
+        /* Tooltip style */
+        .action-icon-btn {
+            position: relative;
+        }
+
+        .action-icon-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: #21262d;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s;
+            border: 1px solid var(--border-dark);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-icon-btn::before {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(2px);
+            border: 6px solid transparent;
+            border-top-color: #21262d;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s;
+        }
+
+        .action-icon-btn:hover::after,
+        .action-icon-btn:hover::before {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        .action-icon-btn:hover::before {
+            transform: translateX(-50%) translateY(4px);
+        }
+
+        .chat-controls-row {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 40px;
+            margin-bottom: -10px;
+            z-index: 11;
+        }
+
+        .layout-controls {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 3px;
+            border: 1px solid var(--border-dark);
+        }
+
+        .layout-btn {
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #8b949e;
+        }
+
+        .layout-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .btn-new-chat {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .btn-new-chat:hover {
+            transform: translateY(-2px);
+        }
+
+        .regenerate-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid var(--border-dark);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #8b949e;
+            cursor: pointer;
+            margin-left: auto;
+            margin-bottom: 12px;
         }
     </style>
 </head>
@@ -780,26 +1029,34 @@
                     Deep Research <span>›</span>
                 </div>
 
-                <h1 class="greeting-title">Hi {{ user.name }}, How are you?</h1>
-                <p class="greeting-sub">How can I help you today?</p>
+                <h1 class="greeting-title" id="greeting-title">Hi {{ user.name }}, How are you?</h1>
+                <p class="greeting-sub" id="greeting-sub">How can I help you today?</p>
 
-                <div class="chat-box-wrapper">
-                    <div class="chat-box__top-controls">
-                        <div class="icon-square">
+                <div class="chat-history" id="chat-history"></div>
+
+                <div class="chat-controls-row" id="chat-controls" style="display: none;">
+                    <div class="layout-controls">
+                        <div class="layout-btn active" data-tooltip="Single View">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="12" y1="3" x2="12" y2="21"></line>
                             </svg>
                         </div>
-                        <div class="icon-square">
+                        <div class="layout-btn" data-tooltip="Split View">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="3" y1="12" x2="21" y2="12"></line>
+                                <rect x="3" y="5" width="8" height="14" rx="1"></rect>
+                                <rect x="13" y="5" width="8" height="14" rx="1"></rect>
                             </svg>
                         </div>
                     </div>
+
+                    <button class="btn-new-chat" onclick="location.reload()">
+                        <span style="font-size: 18px;">+</span> New Chat
+                    </button>
+                </div>
+
+                <div class="chat-box-wrapper">
                     <div class="chat-box">
                         <div class="chat-box__top">
                             <textarea class="chat-input" placeholder="Ask me anything" rows="1"></textarea>
@@ -848,8 +1105,9 @@
                             </div>
 
                             <div class="model-selector">
-                                <span class="dot"></span>
-                                Gemini 3 Flash
+                                <span class="dot"
+                                    style="background: #f87171; box-shadow: 0 0 10px rgba(248, 113, 113, 0.5);"></span>
+                                Groq Llama 3
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -897,8 +1155,146 @@
             profileDropdown.classList.toggle('active');
         });
 
-        document.addEventListener('click', () => {
-            profileDropdown.classList.remove('active');
+        document.addEventListener('click', (e) => {
+            if (profileDropdown) profileDropdown.classList.remove('active');
+
+            // Copy logic
+            const copyBtn = e.target.closest('[data-tooltip="Copy"]');
+            if (copyBtn) {
+                const messageDiv = copyBtn.closest('.message');
+                const content = messageDiv.querySelector('.message__content').textContent;
+                navigator.clipboard.writeText(content).then(() => {
+                    const originalTooltip = copyBtn.getAttribute('data-tooltip');
+                    copyBtn.setAttribute('data-tooltip', 'Copied!');
+                    setTimeout(() => {
+                        copyBtn.setAttribute('data-tooltip', originalTooltip);
+                    }, 2000);
+                });
+            }
+
+            // Thumb Feedback logic
+            const goodBtn = e.target.closest('[data-tooltip="Good response"]');
+            const badBtn = e.target.closest('[data-tooltip="Bad response"]');
+            if (goodBtn || badBtn) {
+                const isGood = !!goodBtn;
+                const btn = goodBtn || badBtn;
+                const parent = btn.parentElement;
+                const otherBtn = isGood ? parent.querySelector('[data-tooltip="Bad response"]') : parent.querySelector('[data-tooltip="Good response"]');
+
+                btn.classList.toggle('active');
+                if (otherBtn) otherBtn.classList.remove('active');
+            }
+        });
+
+        // Chat Logic
+        const sendBtn = document.querySelector('.btn-send');
+        const chatHistory = document.getElementById('chat-history');
+        const greetingTitle = document.getElementById('greeting-title');
+        const greetingSub = document.getElementById('greeting-sub');
+
+        const chatMain = document.querySelector('.chat-main');
+
+        async function sendMessage() {
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            // Prepare UI
+            if (greetingTitle) greetingTitle.style.display = 'none';
+            if (greetingSub) greetingSub.style.display = 'none';
+            chatHistory.classList.add('active');
+            const controls = document.getElementById('chat-controls');
+            if (controls) controls.style.display = 'flex';
+            chatMain.style.justifyContent = 'flex-start';
+            chatMain.style.paddingTop = '0px';
+            document.querySelector('.pill-mode').style.display = 'none';
+
+            // Add user message
+            addMessage(text, 'user');
+            textarea.value = '';
+            textarea.style.height = 'auto';
+
+            // Add AI skeleton/loading
+            const aiMsgDiv = addMessage('Thinking...', 'ai', true);
+
+            try {
+                const formData = new FormData();
+                formData.append('prompt', text);
+
+                const response = await fetch('/api/chat/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    aiMsgDiv.querySelector('.message__content').textContent = data.response;
+                    // Update credits if available
+                    if (data.new_credits !== undefined) {
+                        const creditsSpans = document.querySelectorAll('.header-credits-pill, .credits-head span');
+                        creditsSpans.forEach(s => {
+                            if (s.classList.contains('header-credits-pill')) {
+                                s.innerHTML = `<span style="color: #fbbf24;">⚡</span> ${data.new_credits}`;
+                            } else {
+                                s.textContent = data.new_credits;
+                            }
+                        });
+                    }
+                } else {
+                    aiMsgDiv.querySelector('.message__content').textContent = 'Error: ' + (data.detail || 'Failed to generate response.');
+                    aiMsgDiv.style.color = '#f87171';
+                }
+            } catch (err) {
+                aiMsgDiv.querySelector('.message__content').textContent = 'Error: Could not connect to server.';
+                aiMsgDiv.style.color = '#f87171';
+            }
+
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function addMessage(text, role, isLoading = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message message--${role}`;
+
+            const avatarTxt = role === 'user' ? '{{ user.name[0]|upper }}' : 'G';
+
+            let contentHtml = `
+                <div class="message__avatar">${avatarTxt}</div>
+                <div class="message__content-wrap" style="flex:1;">
+                    <div class="message__content">${text}</div>
+            `;
+
+            if (role === 'ai') {
+                contentHtml += `
+                    <div class="message__actions">
+                        <div class="action-icon-btn" data-tooltip="Copy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div>
+                        <div class="action-icon-btn" data-tooltip="Good response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></div>
+                        <div class="action-icon-btn" data-tooltip="Bad response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg></div>
+                        <div class="action-icon-btn" data-tooltip="Quote"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 12h2m-2 0a2 2 0 104 0 2 2 0 10-4 0z"></path></svg></div>
+                        <div class="action-icon-btn" data-tooltip="Share"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></div>
+                        <div class="action-icon-btn" data-tooltip="Read aloud"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>
+                        <button class="regenerate-pill">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                            Regenerate with <span style="font-weight:700; color: #fff; margin-left: 4px;">Atlas</span>
+                        </button>
+                    </div>
+                `;
+            }
+
+            contentHtml += `</div>`;
+            msgDiv.innerHTML = contentHtml;
+
+            chatHistory.appendChild(msgDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            return msgDiv;
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
     </script>
     <!-- Global Modal -->

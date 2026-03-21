@@ -25,3 +25,6 @@ HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY')
 
 # Google Gemini API Key
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+
+# Groq API Key
+GROQ_API_KEY = os.getenv('GROQ_API_KEY_1')
