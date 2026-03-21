@@ -59,3 +59,9 @@ async def login_page(request: Request):
 @router.get('/register', response_class=HTMLResponse)
 async def register_page(request: Request):
     return templates.TemplateResponse('register.html', {'request': request})
+
+@router.get('/blog-generator', response_class=HTMLResponse)
+async def blog_generator_page(request: Request, user = Depends(get_current_user)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=302)
+    return templates.TemplateResponse('blog_generator.html', {'request': request, 'user': user})

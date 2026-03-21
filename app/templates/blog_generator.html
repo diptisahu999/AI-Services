@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog Generation Service - Visora AI</title>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        .blog-result {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 60px;
+            margin-top: 40px;
+            color: #1a1a1a;
+            line-height: 1.8;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            max-height: 1000px;
+            overflow-y: auto;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+
+        .blog-result h1,
+        .blog-result h2,
+        .blog-result h3 {
+            color: #2563eb;
+            /* Professional Blue */
+            margin-top: 35px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            border-bottom: none;
+        }
+
+        .blog-result h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+
+        .blog-result h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .blog-result p {
+            margin-bottom: 25px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .blog-result ul,
+        .blog-result ol {
+            margin-bottom: 25px;
+            padding-left: 30px;
+        }
+
+        .blog-result li {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .blog-result strong,
+        .blog-result b {
+            color: #f97316;
+            /* Visora Orange */
+            font-weight: 700;
+        }
+
+        .blog-result a {
+            color: #2563eb;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .blog-result a:hover {
+            color: #1e40af;
+        }
+
+        .url-input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .url-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--accent2);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            border-radius: 16px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(249, 115, 22, 0.1);
+            border-top: 4px solid var(--accent2);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-text {
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body class="service-page">
+    <div class="bg" aria-hidden="true">
+        <div class="bg__grid"></div>
+        <div class="bg__aurora bg__aurora--a"></div>
+        <div class="bg__aurora bg__aurora--b"></div>
+        <div class="bg__aurora bg__aurora--c"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__inner">
+            <div class="nav-left">
+                <a class="brand" href="/">
+                    <div class="brand__logo">V</div>
+                    <span>Visora AI</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="/" class="nav-item">Home</a>
+                    <a href="/chat" class="nav-item">Chat</a>
+                    <div class="nav-item nav-item--tools active">Tools</div>
+                    <a href="/pricing" class="nav-item">Pricing</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                {% if user %}
+                <div class="header-credits-pill">
+                    <span class="icon">⚡</span> <span id="user-credits">{{ user.credits }}</span>
+                </div>
+                <div class="user-avatar">{{ user.name[0]|upper }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="container">
+                <div class="service-split">
+                    <!-- Left Column -->
+                    <div style="flex: 1; display: flex; flex-direction: column;">
+                        <!-- Input Card -->
+                        <div class="work-card">
+                            <div class="work-card__head">
+                                <div class="service-badge">
+                                    <span class="service-badge__icon">✍️</span>
+                                    <span class="service-badge__text">Blog Generation Service</span>
+                                </div>
+                                <div class="credit-badge">
+                                    <span class="icon">⚡</span> 50 Credits
+                                </div>
+                            </div>
+
+                            <div class="work-card__body" style="position: relative;">
+                                <div class="loading-overlay" id="loading-overlay">
+                                    <div class="spinner"></div>
+                                    <div class="status-text" id="status-text">Analyzing Video...</div>
+                                </div>
+
+                                <p style="color: #aaa; margin-bottom: 20px;">Enter a YouTube or video URL to generate a
+                                    full, human-written blog post from the transcript.</p>
+
+                                <div class="url-input-wrapper">
+                                    <input type="text" id="video-url" class="url-input"
+                                        placeholder="https://www.youtube.com/watch?v=..." />
+                                </div>
+
+                                <div class="actions">
+                                    <button class="btn--primary" id="generate-btn" style="width: 100%;">Generate Blog
+                                        POST</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Result Section (Where the blue circle was) -->
+                        <div id="result-container" class="blog-result" style="display: none; position: relative;">
+                            <button class="copy-btn" id="copy-btn">Copy HTML</button>
+                            <div id="blog-content"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Info -->
+                    <aside class="desc-card">
+                        <div class="premium-badge">New Feature</div>
+                        <h3 class="desc-card__title">Video to Blog</h3>
+                        <p class="desc-card__text">
+                            Our AI identifies key themes and rewrites everything into an engaging, human-toned blog
+                            post.
+                        </p>
+
+                        <div class="desc-points">
+                            <div class="point">
+                                <div class="point__icon">🎥</div>
+                                <div>
+                                    <div class="point__title">Transcript Scraping</div>
+                                    <div class="point__text">We pull accurate captions from any video URL.</div>
+                                </div>
+                            </div>
+                            <div class="point">
+                                <div class="point__icon">✨</div>
+                                <div>
+                                    <div class="point__title">Human-Like Tone</div>
+                                    <div class="point__text">Rewritten to sound natural and professional.</div>
+                                </div>
+                            </div>
+                            <div class="point">
+                                <div class="point__icon">🚀</div>
+                                <div>
+                                    <div class="point__title">SEO Optimized</div>
+                                    <div class="point__text">Ready for publication with headers and CTAs.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const generateBtn = document.getElementById('generate-btn');
+        const urlInput = document.getElementById('video-url');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const statusText = document.getElementById('status-text');
+        const resultContainer = document.getElementById('result-container');
+        const blogContent = document.getElementById('blog-content');
+        const copyBtn = document.getElementById('copy-btn');
+        const creditsDisplay = document.getElementById('user-credits');
+
+        const statuses = [
+            "Fetching transcript...",
+            "Analyzing keywords...",
+            "Drafting introduction...",
+            "Structuring guide...",
+            "Humanizing content...",
+            "Finalizing layout..."
+        ];
+
+        let statusInterval;
+
+        generateBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) return alert("Please enter a video URL");
+
+            loadingOverlay.style.display = 'flex';
+            resultContainer.style.display = 'none';
+
+            let statusIdx = 0;
+            statusText.innerText = statuses[0];
+            statusInterval = setInterval(() => {
+                statusIdx = (statusIdx + 1) % statuses.length;
+                statusText.innerText = statuses[statusIdx];
+            }, 4000);
+
+            try {
+                const formData = new FormData();
+                formData.append('video_url', url);
+
+                const response = await fetch('/api/blog/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    blogContent.innerHTML = data.html;
+                    resultContainer.style.display = 'block';
+                    copyBtn.style.display = 'block';
+                    if (data.new_credits !== undefined) {
+                        creditsDisplay.innerText = data.new_credits;
+                    }
+                    // Auto-scroll to results
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert("Error: " + (data.error || data.detail || "Something went wrong"));
+                }
+            } catch (err) {
+                alert("An error occurred. Please try again.");
+                console.error(err);
+            } finally {
+                clearInterval(statusInterval);
+                loadingOverlay.style.display = 'none';
+            }
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const range = document.createRange();
+            range.selectNode(blogContent);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            try {
+                document.execCommand('copy');
+                copyBtn.innerText = "Copied!";
+                setTimeout(() => copyBtn.innerText = "Copy HTML", 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            window.getSelection().removeAllRanges();
+        });
+    </script>
+</body>
+
+</html>
