@@ -65,3 +65,9 @@ async def blog_generator_page(request: Request, user = Depends(get_current_user)
     if not user:
         return RedirectResponse(url="/login", status_code=302)
     return templates.TemplateResponse('blog_generator.html', {'request': request, 'user': user})
+
+@router.get('/video-translate', response_class=HTMLResponse)
+async def video_translate_page(request: Request, user = Depends(get_current_user)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=302)
+    return templates.TemplateResponse('video_translate.html', {'request': request, 'user': user})

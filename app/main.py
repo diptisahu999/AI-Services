@@ -8,6 +8,7 @@ from app.routers.prompt_to_image import router as prompt_to_image_router
 from app.routers.image_inpainting import router as image_inpainting_router
 from app.routers.auth import router as auth_router
 from app.routers.blog_generator import router as blog_generator_router
+from app.routers.video_translate import router as video_translate_router
 from app.database import engine, Base
 from app import models
 
@@ -34,3 +35,4 @@ app.include_router(prompt_to_image_router)
 app.include_router(image_inpainting_router)
 app.include_router(auth_router)
 app.include_router(blog_generator_router)
+app.include_router(video_translate_router)
