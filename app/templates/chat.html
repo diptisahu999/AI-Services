@@ -1240,7 +1240,7 @@
                             if (greetingTitle) greetingTitle.style.display = 'none';
                             if (greetingSub) greetingSub.style.display = 'none';
                             addMessage(chat.message, 'user');
-                            addMessage(chat.response, 'ai');
+                            addMessage(chat.response, 'ai', false, chat.feedback, chat.id);
                         };
                         list.appendChild(item);
                     });
@@ -1288,6 +1288,17 @@
 
                 btn.classList.toggle('active');
                 if (otherBtn) otherBtn.classList.remove('active');
+
+                // PERSIST FEEDBACK
+                const messageDiv = btn.closest('.message');
+                const chatId = messageDiv.getAttribute('data-id');
+                if (chatId) {
+                    const status = btn.classList.contains('active') ? (isGood ? 'Good' : 'Bad') : 'None';
+                    const feedbackData = new FormData();
+                    feedbackData.append('chat_id', chatId);
+                    feedbackData.append('feedback', status);
+                    fetch('/api/chat/feedback', { method: 'POST', body: feedbackData });
+                }
             }
 
             // Regenerate logic
@@ -1347,6 +1358,7 @@
 
                 if (response.ok) {
                     aiMsgDiv.querySelector('.message__content').textContent = data.response;
+                    aiMsgDiv.setAttribute('data-id', data.chat_id);
                     loadChatHistory();
                     // Update credits if available
                     if (data.new_credits !== undefined) {
@@ -1392,6 +1404,7 @@
 
                 if (response.ok) {
                     contentDiv.textContent = data.response;
+                    aiMsgDiv.setAttribute('data-id', data.chat_id);
                     aiMsgDiv.style.opacity = '1';
                     loadChatHistory();
                     // Update credits
@@ -1418,9 +1431,10 @@
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
-        function addMessage(text, role, isLoading = false) {
+        function addMessage(text, role, isLoading = false, feedback = null, chatId = null) {
             const msgDiv = document.createElement('div');
             msgDiv.className = `message message--${role}`;
+            if (chatId) msgDiv.setAttribute('data-id', chatId);
 
             const avatarTxt = role === 'user' ? '{{ user.name[0]|upper }}' : 'G';
 
@@ -1431,11 +1445,14 @@
             `;
 
             if (role === 'ai') {
+                const goodActive = feedback === 'Good' ? 'active' : '';
+                const badActive = feedback === 'Bad' ? 'active' : '';
+
                 contentHtml += `
                     <div class="message__actions">
                         <div class="action-icon-btn" data-tooltip="Copy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg></div>
-                        <div class="action-icon-btn" data-tooltip="Good response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></div>
-                        <div class="action-icon-btn" data-tooltip="Bad response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg></div>
+                        <div class="action-icon-btn ${goodActive}" data-tooltip="Good response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></div>
+                        <div class="action-icon-btn ${badActive}" data-tooltip="Bad response"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg></div>
                         <div class="action-icon-btn" data-tooltip="Quote"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 12h2m-2 0a2 2 0 104 0 2 2 0 10-4 0z"></path></svg></div>
                         <div class="action-icon-btn" data-tooltip="Share"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></div>
                         <div class="action-icon-btn" data-tooltip="Read aloud"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>

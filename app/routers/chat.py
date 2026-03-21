@@ -52,7 +52,8 @@ async def generate_chat(
     return {
         "success": True, 
         "response": response, 
-        "new_credits": user.credits
+        "new_credits": user.credits,
+        "chat_id": chat_entry.id
     }
 
 @router.get("/history")
@@ -69,5 +70,24 @@ async def get_chat_history(
         "message": c.message,
         "response": c.response,
         "model_name": c.model_name,
+        "feedback": c.feedback,
         "created_at": c.created_at.isoformat()
     } for c in history]
+
+@router.post("/feedback")
+async def save_feedback(
+    chat_id: int = Form(...),
+    feedback: str = Form(...), # "Good", "Bad", or "None"
+    user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Please login.")
+    
+    chat_entry = db.query(ChatHistory).filter(ChatHistory.id == chat_id, ChatHistory.user_id == user.id).first()
+    if not chat_entry:
+        raise HTTPException(status_code=404, detail="Chat not found.")
+    
+    chat_entry.feedback = feedback if feedback != "None" else None
+    db.commit()
+    return {"success": True}

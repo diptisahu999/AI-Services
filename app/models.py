@@ -23,6 +23,7 @@ class ChatHistory(Base):
     message = Column(Text, nullable=False)
     response = Column(Text, nullable=False)
     model_name = Column(String, default="Groq Llama 3")
+    feedback = Column(String, nullable=True) # "Good", "Bad", or None
     created_at = Column(DateTime, default=datetime.utcnow)
     
     user = relationship("User", back_populates="chats")
