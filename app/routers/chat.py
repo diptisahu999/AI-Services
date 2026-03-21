@@ -31,7 +31,7 @@ async def generate_chat(
         raise HTTPException(status_code=402, detail=f"Insufficient credits. This chat requires {CREDIT_COST} credits.")
 
     service = ChatService()
-    response = await service.generate_response(prompt)
+    response = await service.generate_response(prompt, model=model)
     
     if "Error:" in response:
         raise HTTPException(status_code=500, detail=response)

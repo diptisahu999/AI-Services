@@ -24,7 +24,7 @@ REALESRGAN_MODEL_PATH = os.getenv('REALESRGAN_MODEL_PATH', '')
 HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY')
 
 # Google Gemini API Key
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY_1')
 
 # Groq API Key
 GROQ_API_KEY = os.getenv('GROQ_API_KEY_1')
