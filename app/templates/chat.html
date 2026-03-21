@@ -683,6 +683,20 @@
             margin-left: auto;
             margin-bottom: 12px;
         }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .regenerate-pill.loading svg {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 
@@ -1057,13 +1071,35 @@
 
                 <div class="chat-box-wrapper">
                     <div class="chat-box">
+                        <div id="file-preview-container"
+                            style="display: none; margin-bottom: 12px; position: relative; width: fit-content;">
+                            <div class="file-preview-wrap"
+                                style="position: relative; width: 100px; height: 100px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-dark);">
+                                <img id="file-preview-img" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="preview-actions"
+                                    style="position: absolute; top: 4px; right: 4px; display: flex; gap: 4px;">
+                                    <button class="preview-action-btn" id="btn-edit-file"
+                                        style="width: 24px; height: 24px; border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2.5">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="preview-action-btn" id="btn-remove-file"
+                                        style="width: 24px; height: 24px; border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px;">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="chat-box__top">
                             <textarea class="chat-input" placeholder="Ask me anything" rows="1"></textarea>
                         </div>
 
                         <div class="chat-box__footer">
                             <div class="footer-tools">
-                                <div class="tool-icon-btn">
+                                <div class="tool-icon-btn" id="btn-attach">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2">
                                         <path
@@ -1071,6 +1107,7 @@
                                         </path>
                                     </svg>
                                 </div>
+                                <input type="file" id="chat-file-input" style="display: none;">
                                 <div class="tool-icon-btn">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2">
@@ -1140,6 +1177,45 @@
     <script>
         // Simple auto-resize for textarea
         const textarea = document.querySelector('.chat-input');
+        const fileInput = document.getElementById('chat-file-input');
+        const btnAttach = document.getElementById('btn-attach');
+        const filePreviewContainer = document.getElementById('file-preview-container');
+        const filePreviewImg = document.getElementById('file-preview-img');
+        const btnRemoveFile = document.getElementById('btn-remove-file');
+        const btnEditFile = document.getElementById('btn-edit-file');
+
+        btnAttach.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        btnEditFile.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        btnRemoveFile.addEventListener('click', () => {
+            fileInput.value = '';
+            filePreviewContainer.style.display = 'none';
+            filePreviewImg.src = '';
+        });
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        filePreviewImg.src = e.target.result;
+                        filePreviewContainer.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    textarea.value = `File attached: ${file.name}\n` + textarea.value;
+                    textarea.style.height = 'auto';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                }
+            }
+        });
+
         textarea.addEventListener('input', () => {
             textarea.style.height = 'auto';
             textarea.style.height = textarea.scrollHeight + 'px';
@@ -1213,6 +1289,19 @@
                 btn.classList.toggle('active');
                 if (otherBtn) otherBtn.classList.remove('active');
             }
+
+            // Regenerate logic
+            const regenBtn = e.target.closest('.regenerate-pill');
+            if (regenBtn) {
+                const aiMessageDiv = regenBtn.closest('.message--ai');
+                if (aiMessageDiv) {
+                    const userMessageDiv = aiMessageDiv.previousElementSibling;
+                    if (userMessageDiv && userMessageDiv.classList.contains('message--user')) {
+                        const prompt = userMessageDiv.querySelector('.message__content').textContent;
+                        regenerateResponse(prompt, aiMessageDiv);
+                    }
+                }
+            }
         });
 
         // Chat Logic
@@ -1279,6 +1368,53 @@
                 aiMsgDiv.style.color = '#f87171';
             }
 
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        async function regenerateResponse(prompt, aiMsgDiv) {
+            const regenBtn = aiMsgDiv.querySelector('.regenerate-pill');
+            const contentDiv = aiMsgDiv.querySelector('.message__content');
+            const originalText = contentDiv.textContent;
+            contentDiv.textContent = 'Regenerating...';
+            aiMsgDiv.style.opacity = '0.7';
+            if (regenBtn) regenBtn.classList.add('loading');
+
+            try {
+                const formData = new FormData();
+                formData.append('prompt', prompt);
+
+                const response = await fetch('/api/chat/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    contentDiv.textContent = data.response;
+                    aiMsgDiv.style.opacity = '1';
+                    loadChatHistory();
+                    // Update credits
+                    if (data.new_credits !== undefined) {
+                        const creditsSpans = document.querySelectorAll('.header-credits-pill, .credits-head span');
+                        creditsSpans.forEach(s => {
+                            if (s.classList.contains('header-credits-pill')) {
+                                s.innerHTML = `<span style="color: #fbbf24;">⚡</span> ${data.new_credits}`;
+                            } else {
+                                s.textContent = data.new_credits;
+                            }
+                        });
+                    }
+                } else {
+                    contentDiv.textContent = 'Error: ' + (data.detail || 'Failed to regenerate.');
+                    aiMsgDiv.style.color = '#f87171';
+                }
+            } catch (err) {
+                contentDiv.textContent = 'Error: Could not connect to server.';
+                aiMsgDiv.style.color = '#f87171';
+            } finally {
+                if (regenBtn) regenBtn.classList.remove('loading');
+            }
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 

@@ -17,9 +17,17 @@ async def generate_chat(
     if not user:
         raise HTTPException(status_code=401, detail="Please login to use this service.")
     
-    CREDIT_COST = 10
+    # Calculate credit cost based on message length
+    # Short (< 12) = 1 credit, Medium (> 12) = 2 credits, Long (> 30) = 3 credits
+    if len(prompt) > 30:
+        CREDIT_COST = 3
+    elif len(prompt) > 12:
+        CREDIT_COST = 2
+    else:
+        CREDIT_COST = 1
+    
     if user.credits < CREDIT_COST:
-        raise HTTPException(status_code=402, detail=f"Insufficient credits. This service costs {CREDIT_COST} credits.")
+        raise HTTPException(status_code=402, detail=f"Insufficient credits. This chat requires {CREDIT_COST} credits.")
 
     service = ChatService()
     response = await service.generate_response(prompt)
