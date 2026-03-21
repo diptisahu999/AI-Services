@@ -684,6 +684,25 @@
             margin-bottom: 12px;
         }
 
+        body.sidebar-hidden .sidebar {
+            width: 0;
+            padding: 0;
+            overflow: hidden;
+            border-right: none;
+        }
+
+        body.sidebar-hidden .chat-container {
+            width: 100%;
+        }
+
+        body.sidebar-hidden .chat-header {
+            justify-content: flex-end;
+        }
+
+        body.sidebar-hidden .chat-box-wrapper {
+            max-width: 1000px;
+        }
+
         @keyframes spin {
             from {
                 transform: rotate(0deg);
@@ -984,10 +1003,15 @@
 
                 <div class="history-label">
                     Chats History
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg id="btn-search-history" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" style="cursor: pointer;">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
+                </div>
+                <div id="search-history-container" style="display: none; padding: 0 12px 12px 12px;">
+                    <input type="text" id="search-history-input" placeholder="Search chats..."
+                        style="width: 100%; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-dark); border-radius: 6px; color: #fff; font-size: 12px; outline: none;">
                 </div>
                 <div class="history-list">
                 </div>
@@ -1033,7 +1057,15 @@
         <!-- Main Area -->
         <div class="chat-container">
             <header class="chat-header">
-                <div class="action-icon" style="font-size: 20px;">💬</div>
+                <button id="btn-toggle-sidebar" class="action-icon-btn"
+                    style="background: none; border: none; color: #fff; cursor: pointer;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="action-icon" style="font-size: 20px;"></div>
             </header>
 
             <main class="chat-main">
@@ -1183,6 +1215,41 @@
         const filePreviewImg = document.getElementById('file-preview-img');
         const btnRemoveFile = document.getElementById('btn-remove-file');
         const btnEditFile = document.getElementById('btn-edit-file');
+
+        // History Search Logic
+        const btnSearchHistory = document.getElementById('btn-search-history');
+        const searchHistoryContainer = document.getElementById('search-history-container');
+        const searchHistoryInput = document.getElementById('search-history-input');
+
+        // Sidebar Toggle Logic
+        const logo = document.querySelector('.logo-c');
+        const btnToggleSidebar = document.getElementById('btn-toggle-sidebar');
+        const menuToggleInSidebar = document.querySelector('.sidebar-toggle');
+
+        if (logo) logo.style.cursor = 'pointer';
+        [logo, btnToggleSidebar, menuToggleInSidebar].forEach(el => {
+            if (el) {
+                el.addEventListener('click', () => {
+                    document.body.classList.toggle('sidebar-hidden');
+                });
+            }
+        });
+
+        btnSearchHistory.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = searchHistoryContainer.style.display === 'none';
+            searchHistoryContainer.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) searchHistoryInput.focus();
+        });
+
+        searchHistoryInput.addEventListener('input', () => {
+            const term = searchHistoryInput.value.toLowerCase();
+            const items = document.querySelectorAll('.history-item');
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(term) ? 'block' : 'none';
+            });
+        });
 
         btnAttach.addEventListener('click', () => {
             fileInput.click();
