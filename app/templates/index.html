@@ -8,6 +8,69 @@
   <link rel="stylesheet" href="/static/css/index.css" />
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='black'/></svg>">
+  <style>
+    /* Blog Demo Item Styles */
+    .blog-demo-card {
+      background: #0a0a0f !important;
+      height: 100%;
+      border-radius: 20px;
+      padding: 25px !important;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-header-title {
+      color: #fff;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      text-align: left !important;
+    }
+
+    .skeleton-line {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+
+    .blog-info-tag {
+      color: #8b5cf6;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .status-box {
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .status-label {
+      color: #a855f7;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .status-text {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+  </style>
 </head>
 
 <body>
@@ -253,7 +316,8 @@
           professional image cleaning to artistic generation.</p>
         <div class="hero__actions">
           <a href="#services" class="btn-primary">Explore Services</a>
-          <a href="#demo" class="btn-secondary" style="display:inline-block; text-align:center;">Watch Demo</a>
+          <a href="/how-it-works" class="btn-secondary" style="display:inline-block; text-align:center;">How it
+            works</a>
         </div>
       </div>
     </section>
@@ -375,6 +439,26 @@
               </div>
             </div>
 
+            <div class="demo-col" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
+              <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">Blog Generation</h3>
+              <div class="demo-slider-wrapper blog-demo-card" style="max-width: 350px; height: 350px;">
+                <h4 class="blog-header-title">The Future of AI Content Generation</h4>
+                <div class="blog-skeleton">
+                  <div class="skeleton-line" style="width: 100%;"></div>
+                  <div class="skeleton-line" style="width: 90%;"></div>
+                  <div class="skeleton-line" style="width: 95%;"></div>
+                  <div class="skeleton-line" style="width: 70%;"></div>
+                  <div class="skeleton-line" style="width: 100%;"></div>
+                  <div class="skeleton-line" style="width: 85%;"></div>
+                </div>
+                <div class="blog-info-tag">SEO OPTIMIZED</div>
+                <div class="status-box">
+                  <div class="status-label">SERVICE STATUS</div>
+                  <div class="status-text">Generating 100% SEO-Ready Human-Like Content</div>
+                </div>
+              </div>
+            </div>
+
             <!-- Clones for circular effect -->
             <div class="demo-col clone" style="flex: 0 0 calc(33.333% - 27px); min-width: 320px;">
               <h3 style="color: white; font-weight: 700; margin-bottom: 20px; text-align: center;">AI Image Upscaler
@@ -403,9 +487,10 @@
             const next = document.getElementById('demo-next');
             const prev = document.getElementById('demo-prev');
             let index = 0;
-            const itemCount = 5; // Updated to 5 items
+            const itemCount = 6; // Updated to 6 items
             const gap = 40;
 
+            // Re-initialize slider logic on clone if needed, but for now just fix navigation
             function updateCarousel() {
               const itemWidth = items[0].offsetWidth + gap;
               track.style.transform = `translateX(-${index * itemWidth}px)`;
@@ -579,7 +664,7 @@
         <div class="footer-col">
           <h4>Resources</h4>
           <div class="footer-list">
-            <a href="#">API Documentation</a>
+            <a href="/how-it-works">API Documentation</a>
             <a href="#">Tutorials</a>
             <a href="#">Community</a>
             <a href="#">Changelog</a>
