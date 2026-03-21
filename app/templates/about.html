@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About Us - Visora AI | The Future of Creative Tools</title>
+    <link rel="stylesheet" href="/static/css/index.css" />
+    <style>
+        .about-hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        .about-content {
+            padding: 60px 0 100px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 80px;
+            align-items: center;
+            margin-bottom: 120px;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-image-wrapper img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+        }
+
+        .about-image-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 80px;
+        }
+
+        .value-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .value-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-10px);
+        }
+
+        .value-icon {
+            font-size: 32px;
+            margin-bottom: 24px;
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #d946ef);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-section {
+            padding: 100px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .team-section,
+        .values-section {
+            text-align: center;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .team-card {
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #1e1b4b, #312e81);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .team-name {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            color: #8b5cf6;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="about-page">
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__inner">
+            <div class="nav-left">
+                <a class="brand" href="/">
+                    <div class="brand__logo">V</div>
+                    <span>Visora AI</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="/" class="nav-item">Home</a>
+                    <a href="/chat" class="nav-item">Chat</a>
+                    <div class="nav-item nav-item--tools">
+                        Tools
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+
+                        <!-- Mega Menu -->
+                        <div class="mega-menu">
+                            <div class="mega-menu__sidebar">
+                                <div class="sidebar-item">
+                                    <div class="sidebar-item__link">
+                                        <div class="sidebar-item__icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                                <line x1="8" y1="21" x2="16" y2="21"></line>
+                                                <line x1="12" y1="17" x2="12" y2="21"></line>
+                                            </svg>
+                                        </div>
+                                        <div class="sidebar-item__text">
+                                            <h4>Web App</h4>
+                                            <p>Open in browser</p>
+                                        </div>
+                                    </div>
+                                    <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="mega-menu__content">
+                                <div class="menu-column">
+                                    <h3>Research & Academic</h3>
+                                    <div class="menu-list">
+                                        <a href="#" class="menu-link">Deep Research <span
+                                                class="badge-new">New</span></a>
+                                        <a href="/blog-generator" class="menu-link">Blog Generation <span
+                                                class="badge-new">New</span></a>
+                                        <a href="/video-translate" class="menu-link">Video Translate <span
+                                                class="badge-new">New</span></a>
+                                    </div>
+                                </div>
+                                <div class="menu-column">
+                                    <h3>Generative AI</h3>
+                                    <div class="menu-list">
+                                        <a href="/text-to-image" class="menu-link">AI Text to Image <span
+                                                class="badge-new">New</span></a>
+                                        <a href="/image-to-art" class="menu-link">AI Image to Art</a>
+                                        <a href="/image-inpainting" class="menu-link">AI Object Remover <span
+                                                class="badge-new">New</span></a>
+                                        <a href="/image-cleaner" class="menu-link">AI Image Upscaler</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/pricing" class="nav-item">Pricing</a>
+                </nav>
+            </div>
+            <div class="nav-right">
+                {% if user %}
+                <div class="user-menu-wrapper">
+                    <div class="header-credits-pill">
+                        <span class="icon">⚡</span> {{ user.credits }}
+                    </div>
+                    <div class="user-avatar" id="user-avatar">{{ user.name[0]|upper }}</div>
+                </div>
+                {% else %}
+                <div class="auth-buttons" style="display: flex; gap: 12px; align-items: center;">
+                    <a href="/login" style="color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;">Sign
+                        In</a>
+                    <a href="/register" class="btn-primary"
+                        style="padding: 8px 20px; font-size: 14px; border-radius: 10px;">Sign Up</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <div class="container">
+                <div class="hero__badge">
+                    <span>🚀 Our Mission</span>
+                </div>
+                <h1 class="hero__title">Pioneering the future of <br> Human-AI synergy.</h1>
+                <p class="hero__subtitle">We're on a mission to democratize state-of-the-art AI technology, providing
+                    creators with the tools they need to bring their boldest visions to life.</p>
+            </div>
+        </section>
+
+        <section class="about-content">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text">
+                        <h2 class="section-title" style="text-align: left; margin: 0 0 24px;">The Story of Visora</h2>
+                        <p
+                            style="color: rgba(255,255,255,0.7); font-size: 18px; line-height: 1.8; margin-bottom: 24px;">
+                            Founded in 2026, Visora AI emerged from a simple observation: the world's most powerful AI
+                            models were hidden behind complex interfaces and high barriers to entry.</p>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 18px; line-height: 1.8;">Our team of
+                            visionary engineers and designers set out to build a platform where advanced machine
+                            learning meets intuitive design. We believe that technology should be an invisible bridge
+                            between imagination and reality.</p>
+                    </div>
+                    <div class="about-image-wrapper">
+                        <img src="/static/images/about-main.png" alt="Visora Team Collaboration" id="about-main-img">
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">10k+</div>
+                            <div class="stat-label">Images Generated</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">8k+</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">AI Models</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">97.9%</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="values-section">
+                    <h2 class="section-title">Our Values</h2>
+                    <div class="values-grid">
+                        <div class="value-card">
+                            <div class="value-icon">🛡️</div>
+                            <h3 style="color: #fff; margin-bottom: 16px;">Ethics First</h3>
+                            <p style="color: rgba(255,255,255,0.6); line-height: 1.6;">We build responsible AI. Privacy,
+                                security, and ethical considerations are baked into every line of code we write.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">⚡</div>
+                            <h3 style="color: #fff; margin-bottom: 16px;">Speed & Quality</h3>
+                            <p style="color: rgba(255,255,255,0.6); line-height: 1.6;">Why choose? We leverage
+                                cutting-edge infrastructure to deliver high-fidelity results in milliseconds.</p>
+                        </div>
+                        <div class="value-card">
+                            <div class="value-icon">🌈</div>
+                            <h3 style="color: #fff; margin-bottom: 16px;">Inclusivity</h3>
+                            <p style="color: rgba(255,255,255,0.6); line-height: 1.6;">Our tools are designed for
+                                everyone—from solo creators to enterprise teams across the globe.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-section" style="margin-top: 120px; padding-bottom: 100px;">
+                    <h2 class="section-title">The Visionaries</h2>
+                    <p class="section-subtitle">Meet the minds behind the magic.</p>
+                    <div class="team-grid">
+                        <div class="team-card">
+                            <div class="team-avatar">👨‍💻</div>
+                            <div class="team-name">Alex Rivera</div>
+                            <div class="team-role">Founder & CEO</div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-avatar">👩‍🎨</div>
+                            <div class="team-name">Sarah Chen</div>
+                            <div class="team-role">Head of Design</div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-avatar">🧠</div>
+                            <div class="team-name">Dr. Marcus Thorne</div>
+                            <div class="team-role">Chief AI Scientist</div>
+                        </div>
+                        <div class="team-card">
+                            <div class="team-avatar">⚙️</div>
+                            <div class="team-name">Elena Sokolov</div>
+                            <div class="team-role">CTO</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__brand">
+                    <a class="brand" href="/">
+                        <div class="brand__logo">V</div>
+                        <span>Visora AI</span>
+                    </a>
+                    <p>Building the future of artificial intelligence tools for creators, researchers, and developers
+                        worldwide.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <div class="footer-list">
+                        <a href="/image-cleaner">Image Upscaler</a>
+                        <a href="/image-to-art">Art Generator</a>
+                        <a href="/blog-generator">Blog Generator</a>
+                        <a href="/video-translate">Video Translate</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <div class="footer-list">
+                        <a href="/how-it-works">API Documentation</a>
+                        <a href="#">Tutorials</a>
+                        <a href="#">Community</a>
+                        <a href="#">Changelog</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <div class="footer-list">
+                        <a href="/about">About Us</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span>&copy; 2026 Visora AI Inc. All rights reserved.</span>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="bg">
+        <div class="bg__grid"></div>
+        <div class="bg__orb bg__orb--1"></div>
+        <div class="bg__orb bg__orb--2"></div>
+        <canvas id="bg-canvas"></canvas>
+    </div>
+
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>
