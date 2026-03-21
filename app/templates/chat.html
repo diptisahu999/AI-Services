@@ -976,7 +976,6 @@
                     </svg>
                 </div>
                 <div class="history-list">
-                    <div class="history-item">https://enquiry.indianrail.gov.i...</div>
                 </div>
             </nav>
 
@@ -1146,6 +1145,36 @@
             textarea.style.height = textarea.scrollHeight + 'px';
         });
 
+        async function loadChatHistory() {
+            try {
+                const response = await fetch('/api/chat/history');
+                const data = await response.json();
+                const list = document.querySelector('.history-list');
+                if (list && Array.isArray(data)) {
+                    list.innerHTML = '';
+                    data.forEach(chat => {
+                        const item = document.createElement('div');
+                        item.className = 'history-item';
+                        item.textContent = chat.message.substring(0, 30) + (chat.message.length > 30 ? '...' : '');
+                        item.title = chat.message;
+                        item.onclick = () => {
+                            // Focus on this chat
+                            chatHistory.innerHTML = '';
+                            chatHistory.classList.add('active');
+                            if (greetingTitle) greetingTitle.style.display = 'none';
+                            if (greetingSub) greetingSub.style.display = 'none';
+                            addMessage(chat.message, 'user');
+                            addMessage(chat.response, 'ai');
+                        };
+                        list.appendChild(item);
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to load history", err);
+            }
+        }
+        loadChatHistory();
+
         // Dropdown toggle logic
         const userAvatar = document.getElementById('user-avatar');
         const profileDropdown = document.getElementById('profile-dropdown');
@@ -1229,6 +1258,7 @@
 
                 if (response.ok) {
                     aiMsgDiv.querySelector('.message__content').textContent = data.response;
+                    loadChatHistory();
                     // Update credits if available
                     if (data.new_credits !== undefined) {
                         const creditsSpans = document.querySelectorAll('.header-credits-pill, .credits-head span');
